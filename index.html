@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='style.css'>
+    <script src='timeline.js'></script>
+</head>
+<body>
+    <div id="Timeline"></div>
+</body>
+<script>
+    var timelineDiv = document.getElementById("Timeline");
+    const multiplier = 2;
+    const itemHeight = "5em";
+    let distance = 0;
+    var getX = (person) => {
+        if(person.Born)
+            return person.Born;
+        else if(person.FathersAgeAtBirth)
+            return distance + person.FathersAgeAtBirth;
+        else return 7;
+    }
+    var AddItem = (person) => {
+        let div = document.createElement("div");
+        div.style.background = "#999";
+        div.style.height = itemHeight;
+        div.style.width = `${person.Age * multiplier}px`;
+        div.innerText = person.Name;
+        let bornAt = getX(person);
+        div.style.left = `${bornAt * multiplier}px`;
+        timelineDiv.appendChild(div);
+        if(person.Children){
+            distance = bornAt;
+            person.Children.forEach((child) =>{
+                AddItem(child);
+            });
+        }
+
+    };
+
+    Timeline.People.forEach((person)=>{
+        console.log(person);
+        AddItem(person);
+
+    });
+</script>
+</html>
