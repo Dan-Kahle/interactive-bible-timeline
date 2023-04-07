@@ -13,7 +13,6 @@
 <script>
     var timelineDiv = document.getElementById("Timeline");
     const multiplier = 2;
-    const itemHeight = "5em";
     let distance = 0;
     var getX = (person) => {
         if(person.Born)
@@ -22,14 +21,28 @@
             return distance + person.FathersAgeAtBirth;
         else return 7;
     }
+    var getId = (name, distance) => `${name}-${distance}`.hexEncode();
     var AddItem = (person) => {
         let div = document.createElement("div");
+        let header = document.createElement("h2");
+        let label = document.createElement("label")
+        let checkBox = document.createElement('input');
+        checkBox.type = "checkbox";
+        div.onclick = function() {
+            checkBox.checked = !checkBox.checked;
+        }
+        let checkBoxName = getId(person.Name, distance);
+        checkBox.id = checkBoxName;
+        checkBox.name = "personSelected";
+        label.htmlFor = checkBoxName;
+        label.innerText = person.Name;
         div.style.background = "#999";
-        div.style.height = itemHeight;
         div.style.width = `${person.Age * multiplier}px`;
-        div.innerText = person.Name;
         let bornAt = getX(person);
         div.style.left = `${bornAt * multiplier}px`;
+        header.appendChild(label);
+        div.appendChild(header);
+        div.appendChild(checkBox);
         timelineDiv.appendChild(div);
         if(person.Children){
             distance = bornAt;
@@ -41,7 +54,6 @@
     };
 
     Timeline.People.forEach((person)=>{
-        console.log(person);
         AddItem(person);
 
     });

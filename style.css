@@ -1,3 +1,35 @@
+:root {
+    --site-background-color: #fffcdd;
+    --person-border-left-right-border-property:
+        solid #444 .225rem;
+    --person-border-top-bottom-border-property:
+        solid var(--site-background-color) .75rem;
+    --person-name-margin: 1rem;
+}
+body {
+    background-color: var(--site-background-color);
+}
+input[type='checkbox']{
+    display: none;
+}
 #Timeline div {
     position: relative;
+    box-sizing: border-box;
+    border-left: var(--person-border-left-right-border-property);
+    border-right: var(--person-border-left-right-border-property);
+    border-top: var(--person-border-top-bottom-border-property);
+    border-bottom: var(--person-border-top-bottom-border-property);
+    opacity: .33;
+    transition: opacity .75s;
+    cursor: pointer;
+}
+#Timeline div:has(input:checked){
+    opacity: 1;
+}
+#Timeline div:hover {
+    opacity:1;
+}
+#Timeline div label {
+    margin:var(--person-name-margin);
+    color: var(--site-background-color);
 }
