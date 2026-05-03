@@ -1,61 +1,56 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset='utf-8'>
-    <title>Page Title</title>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='style.css'>
-    <script src='timeline.js'></script>
+  <meta charset="utf-8">
+  <title>Interactive Bible Timeline</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="Timeline"></div>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <h1>Interactive Bible Timeline</h1>
+      <div class="controls">
+        <input type="search" id="search" placeholder="Search by name or tag...">
+        <details class="filter-group">
+          <summary>Era</summary>
+          <div id="eraFilters" class="filter-list"></div>
+        </details>
+        <details class="filter-group">
+          <summary>Category</summary>
+          <div id="categoryFilters" class="filter-list"></div>
+        </details>
+        <details class="filter-group">
+          <summary>Display</summary>
+          <div class="filter-list">
+            <label><input type="checkbox" id="toggleEvents" checked> Show events</label>
+            <label><input type="checkbox" id="toggleTextual" checked> Show primeval (textual dates)</label>
+            <label><input type="checkbox" id="toggleOT" checked> Old Testament</label>
+            <label><input type="checkbox" id="toggleNT" checked> New Testament</label>
+            <label>Zoom <input type="range" id="zoom" min="0.4" max="2" step="0.1" value="1"></label>
+          </div>
+        </details>
+        <button id="resetFilters" type="button">Reset filters</button>
+      </div>
+      <p class="meta-note">
+        Academic chronology (late-date Exodus, Thiele's kings).
+        Primeval ages are from the Masoretic Text and shown on a compressed scale.
+        Click any bar for details.
+      </p>
+    </div>
+  </header>
+
+  <main class="timeline-wrap">
+    <div id="yearAxis" class="year-axis"></div>
+    <div id="timeline" class="timeline"></div>
+  </main>
+
+  <aside id="detailPanel" class="detail-panel" aria-hidden="true">
+    <button id="closeDetail" class="close-btn" aria-label="Close">&times;</button>
+    <div id="detailContent"></div>
+  </aside>
+
+  <script src="data.js"></script>
+  <script src="timeline.js"></script>
 </body>
-<script>
-    var timelineDiv = document.getElementById("Timeline");
-    const multiplier = 2;
-    let distance = 0;
-    var getX = (person) => {
-        if(person.Born)
-            return person.Born;
-        else if(person.FathersAgeAtBirth)
-            return distance + person.FathersAgeAtBirth;
-        else return 7;
-    }
-    var getId = (name, distance) => `${name}-${distance}`.hexEncode();
-    var AddItem = (person) => {
-        let div = document.createElement("div");
-        let header = document.createElement("h2");
-        let label = document.createElement("label")
-        let checkBox = document.createElement('input');
-        checkBox.type = "checkbox";
-        div.onclick = function() {
-            checkBox.checked = !checkBox.checked;
-        }
-        let checkBoxName = getId(person.Name, distance);
-        checkBox.id = checkBoxName;
-        checkBox.name = "personSelected";
-        label.htmlFor = checkBoxName;
-        label.innerText = person.Name;
-        div.style.background = "#999";
-        div.style.width = `${person.Age * multiplier}px`;
-        let bornAt = getX(person);
-        div.style.left = `${bornAt * multiplier}px`;
-        header.appendChild(label);
-        div.appendChild(header);
-        div.appendChild(checkBox);
-        timelineDiv.appendChild(div);
-        if(person.Children){
-            distance = bornAt;
-            person.Children.forEach((child) =>{
-                AddItem(child);
-            });
-        }
-
-    };
-
-    Timeline.People.forEach((person)=>{
-        AddItem(person);
-
-    });
-</script>
 </html>

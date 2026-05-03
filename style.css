@@ -1,35 +1,409 @@
 :root {
-    --site-background-color: #fffcdd;
-    --person-border-left-right-border-property:
-        solid #444 .225rem;
-    --person-border-top-bottom-border-property:
-        solid var(--site-background-color) .75rem;
-    --person-name-margin: 1rem;
+  --bg: #fbf6e7;
+  --ink: #2b2418;
+  --ink-soft: #6a5d44;
+  --line: #d8cfb6;
+  --accent: #8b5a2b;
+  --panel-bg: #fffdf5;
+
+  /* category colors */
+  --c-patriarch: #8d6e3a;
+  --c-matriarch: #b87a8a;
+  --c-king-judah: #6e4b9e;
+  --c-king-israel: #4b6e9e;
+  --c-queen: #9e4b7a;
+  --c-foreign-king: #6c757d;
+  --c-prophet: #2f7d4f;
+  --c-priest: #b08a3e;
+  --c-judge: #5e8c5a;
+  --c-apostle: #c2410c;
+  --c-messiah: #b8860b;
+  --c-other: #7a6c50;
+
+  --topbar-h: 130px;
 }
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
 body {
-    background-color: var(--site-background-color);
+  background: var(--bg);
+  color: var(--ink);
+  font-family: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+  line-height: 1.4;
 }
-input[type='checkbox']{
-    display: none;
+
+/* ---------- Topbar ---------- */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
-#Timeline div {
-    position: relative;
-    box-sizing: border-box;
-    border-left: var(--person-border-left-right-border-property);
-    border-right: var(--person-border-left-right-border-property);
-    border-top: var(--person-border-top-bottom-border-property);
-    border-bottom: var(--person-border-top-bottom-border-property);
-    opacity: .33;
-    transition: opacity .75s;
-    cursor: pointer;
+.topbar-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0.6rem 1rem;
 }
-#Timeline div:has(input:checked){
-    opacity: 1;
+.topbar h1 {
+  margin: 0 0 0.4rem 0;
+  font-size: 1.4rem;
+  letter-spacing: 0.02em;
 }
-#Timeline div:hover {
-    opacity:1;
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
 }
-#Timeline div label {
-    margin:var(--person-name-margin);
-    color: var(--site-background-color);
+.controls input[type="search"] {
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--panel-bg);
+  font-family: inherit;
+  font-size: 0.9rem;
+  min-width: 180px;
+}
+.controls button {
+  padding: 0.4rem 0.7rem;
+  border: 1px solid var(--line);
+  background: var(--panel-bg);
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.85rem;
+}
+.controls button:hover { background: #f5edd2; }
+.filter-group { font-size: 0.85rem; }
+.filter-group summary {
+  cursor: pointer;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--line);
+  background: var(--panel-bg);
+  border-radius: 4px;
+  user-select: none;
+}
+.filter-group[open] summary { background: #f5edd2; }
+.filter-list {
+  position: absolute;
+  margin-top: 4px;
+  background: var(--panel-bg);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 0.5rem 0.75rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 60;
+  min-width: 180px;
+}
+.filter-list label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+.filter-list input[type="range"] { width: 120px; }
+.meta-note {
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  margin: 0.4rem 0 0 0;
+  font-style: italic;
+}
+
+/* ---------- Timeline ---------- */
+.timeline-wrap {
+  position: relative;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1rem 1rem 4rem 1rem;
+}
+.year-axis {
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+  width: 70px;
+  pointer-events: none;
+}
+.year-axis .year-label {
+  position: absolute;
+  left: 0;
+  width: 70px;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  border-top: 1px solid var(--line);
+  padding-top: 2px;
+  padding-right: 8px;
+  text-align: right;
+  background: var(--bg);
+}
+.year-axis .year-label.major {
+  color: var(--ink);
+  font-weight: bold;
+  border-top-color: var(--accent);
+}
+
+.timeline {
+  position: relative;
+  margin-left: 80px;
+  border-left: 2px solid var(--line);
+}
+
+/* horizontal grid lines extending across the timeline */
+.timeline .grid-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px dashed rgba(139, 90, 43, 0.15);
+  pointer-events: none;
+}
+.timeline .grid-line.major {
+  border-top-style: solid;
+  border-top-color: rgba(139, 90, 43, 0.3);
+}
+
+/* Event bands span across the timeline */
+.event-band {
+  position: absolute;
+  left: 0;
+  right: 0;
+  pointer-events: auto;
+  cursor: pointer;
+  z-index: 5;
+}
+.event-band .event-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  border-top: 2px solid var(--accent);
+  opacity: 0.7;
+}
+.event-band .event-label {
+  position: absolute;
+  right: 8px;
+  top: 2px;
+  background: var(--bg);
+  color: var(--accent);
+  padding: 0 6px;
+  font-size: 0.78rem;
+  font-style: italic;
+  border: 1px solid var(--accent);
+  border-radius: 3px;
+  white-space: nowrap;
+  max-width: 240px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.event-band.span .event-line {
+  border-top: none;
+  background: rgba(139, 90, 43, 0.08);
+  border-left: 2px dashed var(--accent);
+  border-right: 2px dashed var(--accent);
+  height: 100%;
+}
+.event-band:hover { z-index: 11; }
+.event-band:hover .event-label {
+  background: var(--accent);
+  color: white;
+}
+
+/* People bars */
+.person {
+  position: absolute;
+  border-radius: 3px;
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  transition: transform 0.1s, box-shadow 0.1s, opacity 0.2s;
+  background: var(--c-other);
+  color: white;
+  font-size: 0.78rem;
+  z-index: 10;
+}
+.person:hover {
+  transform: scale(1.04);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  z-index: 20;
+}
+.person.dimmed { opacity: 0.18; }
+.person.selected {
+  outline: 3px solid #f5b400;
+  outline-offset: 2px;
+  z-index: 25;
+}
+
+.person .name {
+  display: block;
+  padding: 4px 6px 2px 6px;
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.person .years {
+  display: block;
+  padding: 0 6px 4px 6px;
+  font-size: 0.7rem;
+  opacity: 0.85;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* category colors */
+.person.cat-patriarch { background: var(--c-patriarch); }
+.person.cat-matriarch { background: var(--c-matriarch); }
+.person.cat-king-judah { background: var(--c-king-judah); }
+.person.cat-king-israel { background: var(--c-king-israel); }
+.person.cat-queen { background: var(--c-queen); }
+.person.cat-foreign-king { background: var(--c-foreign-king); }
+.person.cat-prophet { background: var(--c-prophet); }
+.person.cat-priest { background: var(--c-priest); }
+.person.cat-judge { background: var(--c-judge); }
+.person.cat-apostle { background: var(--c-apostle); }
+.person.cat-messiah {
+  background: linear-gradient(180deg, #d4a017 0%, #b8860b 100%);
+  color: #2b2418;
+}
+.person.cat-other { background: var(--c-other); }
+
+/* uncertainty visual */
+.person.cert-textual,
+.person.cert-legendary {
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(255,255,255,0.0) 0,
+    rgba(255,255,255,0.0) 6px,
+    rgba(255,255,255,0.18) 6px,
+    rgba(255,255,255,0.18) 12px
+  );
+}
+.person.cert-approximate {
+  border: 1px dashed rgba(255,255,255,0.5);
+}
+
+/* reign indicator: small accent stripe on the left edge */
+.person.has-reign::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 4px;
+  background: rgba(255, 215, 0, 0.85);
+  top: var(--reign-top, 0);
+  height: var(--reign-height, 0);
+}
+
+/* ---------- Detail panel ---------- */
+.detail-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: min(420px, 90vw);
+  height: 100vh;
+  background: var(--panel-bg);
+  border-left: 1px solid var(--line);
+  box-shadow: -4px 0 16px rgba(0,0,0,0.15);
+  padding: 3rem 1.5rem 2rem 1.5rem;
+  overflow-y: auto;
+  transform: translateX(100%);
+  transition: transform 0.25s ease-out;
+  z-index: 100;
+}
+.detail-panel.open {
+  transform: translateX(0);
+}
+.detail-panel .close-btn {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  background: none;
+  border: none;
+  font-size: 1.6rem;
+  cursor: pointer;
+  color: var(--ink-soft);
+  line-height: 1;
+}
+.detail-panel .close-btn:hover { color: var(--ink); }
+.detail-panel h2 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.4rem;
+}
+.detail-panel .subtitle {
+  color: var(--ink-soft);
+  font-style: italic;
+  margin-bottom: 1rem;
+}
+.detail-panel .field {
+  margin: 0.6rem 0;
+  display: flex;
+  gap: 0.5rem;
+}
+.detail-panel .field .key {
+  flex: 0 0 110px;
+  color: var(--ink-soft);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.detail-panel .field .val {
+  flex: 1;
+  font-size: 0.95rem;
+}
+.detail-panel .desc {
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+.detail-panel ul.refs {
+  margin: 0.25rem 0 0 0;
+  padding-left: 1.2rem;
+}
+.detail-panel .relations a,
+.detail-panel .tag {
+  display: inline-block;
+  margin: 2px 4px 2px 0;
+  padding: 2px 8px;
+  background: #f5edd2;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  font-size: 0.8rem;
+  color: var(--ink);
+  text-decoration: none;
+  cursor: pointer;
+}
+.detail-panel .relations a:hover { background: var(--accent); color: white; }
+
+/* Legend */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.4rem;
+  font-size: 0.78rem;
+}
+.legend .swatch {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  margin-right: 4px;
+  vertical-align: -2px;
+}
+
+@media (max-width: 700px) {
+  .topbar h1 { font-size: 1.1rem; }
+  .controls { gap: 0.3rem; }
+  .controls input[type="search"] { min-width: 120px; flex: 1; }
+  .timeline-wrap { padding: 0.5rem 0.5rem 4rem 0.5rem; }
+  .year-axis { width: 50px; }
+  .year-axis .year-label { width: 50px; font-size: 0.7rem; }
+  .timeline { margin-left: 56px; }
 }
