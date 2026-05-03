@@ -1,224 +1,253 @@
-// Interactive Bible Timeline renderer.
+// Interactive Bible Timeline — renderer
 //
 // Year scale is piecewise:
-//   primeval band   (-4500 to -2100 BC)  compressed at PRIMEVAL_PX_PER_YEAR
-//   historical band (-2100 onward)       at HISTORICAL_PX_PER_YEAR
-// This keeps Methuselah's 969-year bar from dominating the page while still
-// giving real space to David, Jesus, Paul, etc.
+//   Primeval band  (-4500 to -2100 BC)  compressed at PRIMEVAL_PX_PER_YEAR
+//   Historical band(-2100 to +110 AD)   at HISTORICAL_PX_PER_YEAR
+// This keeps the Genesis 5/11 patriarchs' 900-year bars from dominating while
+// giving real vertical space to the historical eras.
 
 (function () {
   "use strict";
 
-  const TIMELINE_TOP = 20;
-  const PRIMEVAL_START = -4500;
-  const PRIMEVAL_END = -2100;
-  let PRIMEVAL_PX_PER_YEAR = 0.5;
-  let HISTORICAL_PX_PER_YEAR = 4;
-  const HISTORICAL_END = 110; // AD 110
+  // ── Scale constants ───────────────────────────────────────────────────────
+  const TIMELINE_TOP    = 24;
+  const PRIMEVAL_START  = -4500;
+  const PRIMEVAL_END    = -2100;
+  const HISTORICAL_END  = 110;
+  let   BASE_PX_PRIMEVAL    = 0.5;
+  let   BASE_PX_HISTORICAL  = 4;
+  let   zoom = 1;
 
-  const COL_GAP = 4;
-  const MIN_BAR_HEIGHT = 14;
-  const COL_WIDTH = 130;
+  function pxPrimeval()    { return BASE_PX_PRIMEVAL  * zoom; }
+  function pxHistorical()  { return BASE_PX_HISTORICAL * zoom; }
 
-  let zoom = 1;
-
-  // ----- year/pixel mapping --------------------------------------------------
   function yearToY(year) {
-    const a = PRIMEVAL_PX_PER_YEAR * zoom;
-    const b = HISTORICAL_PX_PER_YEAR * zoom;
     if (year <= PRIMEVAL_END) {
-      return TIMELINE_TOP + (year - PRIMEVAL_START) * a;
+      return TIMELINE_TOP + (year - PRIMEVAL_START) * pxPrimeval();
     }
-    const primevalSpan = (PRIMEVAL_END - PRIMEVAL_START) * a;
-    return TIMELINE_TOP + primevalSpan + (year - PRIMEVAL_END) * b;
+    const primevalPx = (PRIMEVAL_END - PRIMEVAL_START) * pxPrimeval();
+    return TIMELINE_TOP + primevalPx + (year - PRIMEVAL_END) * pxHistorical();
   }
-  function totalHeight() {
-    return yearToY(HISTORICAL_END) + 40;
-  }
+  function totalHeight() { return yearToY(HISTORICAL_END) + 60; }
 
-  function formatYear(y) {
-    if (y == null) return "";
+  // ── Year formatting ───────────────────────────────────────────────────────
+  function fmt(y) {
+    if (y == null) return "?";
     if (y < 0) return Math.abs(y) + " BC";
-    if (y === 0) return "1 BC"; // shouldn't occur
     return "AD " + y;
   }
-  function formatYearRange(a, b) {
+  function fmtRange(a, b) {
     if (a == null && b == null) return "";
-    if (a != null && b == null) return formatYear(a) + " – ?";
-    if (a == null && b != null) return "? – " + formatYear(b);
-    return formatYear(a) + " – " + formatYear(b);
+    if (b == null) return fmt(a) + " – ?";
+    if (a == null) return "? – " + fmt(b);
+    return fmt(a) + " – " + fmt(b);
   }
 
-  // ----- DOM refs ------------------------------------------------------------
-  const yearAxis = document.getElementById("yearAxis");
-  const timeline = document.getElementById("timeline");
-  const detailPanel = document.getElementById("detailPanel");
-  const detailContent = document.getElementById("detailContent");
-  const closeDetail = document.getElementById("closeDetail");
-  const searchInput = document.getElementById("search");
-  const eraFilters = document.getElementById("eraFilters");
-  const categoryFilters = document.getElementById("categoryFilters");
-  const toggleEvents = document.getElementById("toggleEvents");
-  const toggleTextual = document.getElementById("toggleTextual");
-  const toggleOT = document.getElementById("toggleOT");
-  const toggleNT = document.getElementById("toggleNT");
-  const zoomSlider = document.getElementById("zoom");
-  const resetBtn = document.getElementById("resetFilters");
+  // ── DOM refs ──────────────────────────────────────────────────────────────
+  const $ = (id) => document.getElementById(id);
+  const yearAxis      = $("yearAxis");
+  const timelineEl    = $("timeline");
+  const timelineScroll= $("timelineScroll");
+  const detailPanel   = $("detailPanel");
+  const detailContent = $("detailContent");
+  const detailScrim   = $("detailScrim");
+  const closeDetailBtn= $("closeDetail");
+  const menuToggle    = $("menuToggle");
+  const filterDrawer  = $("filterDrawer");
+  const drawerScrim   = $("drawerScrim");
+  const closeDrawerBtn= $("closeDrawer");
+  const searchInput   = $("search");
+  const eraContainer  = $("eraFilters");
+  const catContainer  = $("categoryFilters");
+  const toggleEvents  = $("toggleEvents");
+  const toggleTextual = $("toggleTextual");
+  const toggleOT      = $("toggleOT");
+  const toggleNT      = $("toggleNT");
+  const zoomSlider    = $("zoom");
+  const zoomInBtn     = $("zoomIn");
+  const zoomOutBtn    = $("zoomOut");
+  const resetBtn      = $("resetFilters");
 
-  // ----- index for relations -------------------------------------------------
-  const peopleById = {};
-  BibleTimeline.people.forEach((p) => { peopleById[p.id] = p; });
+  // ── People index ──────────────────────────────────────────────────────────
+  const byId = {};
+  BibleTimeline.people.forEach((p) => { byId[p.id] = p; });
 
-  // ----- column packing ------------------------------------------------------
-  // Assign each person to the leftmost column whose last-used person doesn't
-  // overlap their lifespan.
-  function assignColumns(people) {
-    const sorted = people.slice().sort((a, b) => a.birthYear - b.birthYear);
-    const columnEnds = []; // columnIndex -> latest deathYear in that column
-    sorted.forEach((p) => {
-      const death = p.deathYear != null ? p.deathYear : p.birthYear + 5;
-      let col = -1;
-      for (let i = 0; i < columnEnds.length; i++) {
-        if (columnEnds[i] <= p.birthYear) { col = i; break; }
-      }
-      if (col === -1) {
-        col = columnEnds.length;
-        columnEnds.push(death);
-      } else {
-        columnEnds[col] = death;
-      }
-      p._column = col;
-    });
-    return columnEnds.length;
-  }
-
-  // ----- filter state --------------------------------------------------------
+  // ── Filter state ──────────────────────────────────────────────────────────
+  // hiddenEras / hiddenCats: sets of values to hide. Empty = show all.
   const state = {
     search: "",
-    eras: new Set(),       // empty = show all
-    categories: new Set(),
-    showEvents: true,
+    hiddenEras: new Set(),
+    hiddenCats: new Set(),
+    showEvents:  true,
     showTextual: true,
-    showOT: true,
-    showNT: true,
+    showOT:      true,
+    showNT:      true,
   };
 
-  // ----- filter UI build -----------------------------------------------------
-  function buildFilterCheckboxes(container, values, set) {
-    container.innerHTML = "";
-    values.forEach((v) => {
-      const id = "f-" + container.id + "-" + v;
-      const wrap = document.createElement("label");
-      const cb = document.createElement("input");
-      cb.type = "checkbox";
-      cb.id = id;
-      cb.value = v;
-      cb.checked = true;
-      cb.addEventListener("change", () => {
-        if (cb.checked) set.delete(v); else set.add(v);
-        // we use "in set" to mean "hidden" to keep "no filter" = show all
-        applyFilters();
-      });
-      wrap.appendChild(cb);
-      const span = document.createElement("span");
-      span.textContent = " " + v.replace(/-/g, " ");
-      wrap.appendChild(span);
-      container.appendChild(wrap);
+  // ── Column packing ────────────────────────────────────────────────────────
+  function colWidth() {
+    return window.innerWidth < 600 ? 90 : window.innerWidth < 1024 ? 110 : 130;
+  }
+  const COL_GAP   = 4;
+  const MIN_BAR_H = 14;
+
+  function assignColumns(people) {
+    const sorted = people.slice().sort((a, b) => a.birthYear - b.birthYear);
+    const ends = [];
+    sorted.forEach((p) => {
+      const death = p.deathYear != null ? p.deathYear : p.birthYear + 5;
+      let col = ends.findIndex((e) => e <= p.birthYear);
+      if (col === -1) { col = ends.length; ends.push(death); }
+      else ends[col] = death;
+      p._col = col;
     });
+    return ends.length;
   }
 
-  const eraOrder = ["primeval","patriarchal","exodus","conquest","judges",
-    "united-monarchy","divided-monarchy","exile","post-exile","second-temple",
-    "nt-gospels","early-church"];
-  const categoryOrder = ["patriarch","matriarch","judge","priest","prophet",
-    "king-judah","king-israel","queen","foreign-king","apostle","messiah","other"];
-
-  buildFilterCheckboxes(eraFilters, eraOrder, state.eras);
-  buildFilterCheckboxes(categoryFilters, categoryOrder, state.categories);
-
-  // ----- match logic ---------------------------------------------------------
-  function matchesPerson(p) {
-    if (state.eras.has(p.era)) return false;
-    if (state.categories.has(p.category)) return false;
+  // ── Match predicates ──────────────────────────────────────────────────────
+  function matchPerson(p) {
+    if (state.hiddenEras.has(p.era)) return false;
+    if (state.hiddenCats.has(p.category)) return false;
     if (!state.showOT && p.testament === "OT") return false;
     if (!state.showNT && p.testament === "NT") return false;
     if (!state.showTextual && p.dateCertainty === "textual") return false;
     if (state.search) {
       const q = state.search.toLowerCase();
-      const hay = (p.name + " " + (p.tags || []).join(" ") + " " + (p.book || "") + " " + (p.description || "")).toLowerCase();
+      const hay = [p.name, ...(p.tags||[]), p.book||"", p.description||""].join(" ").toLowerCase();
       if (!hay.includes(q)) return false;
     }
     return true;
   }
-  function matchesEvent(ev) {
+  function matchEvent(ev) {
     if (!state.showEvents) return false;
     if (!state.showOT && ev.testament === "OT") return false;
     if (!state.showNT && ev.testament === "NT") return false;
     if (state.search) {
       const q = state.search.toLowerCase();
-      const hay = (ev.name + " " + (ev.tags || []).join(" ") + " " + (ev.description || "")).toLowerCase();
+      const hay = [ev.name, ...(ev.tags||[]), ev.description||""].join(" ").toLowerCase();
       if (!hay.includes(q)) return false;
     }
     return true;
   }
 
-  // ----- year axis -----------------------------------------------------------
-  function renderYearAxis() {
+  // ── Chip filter builders ──────────────────────────────────────────────────
+  const ERA_ORDER = [
+    "primeval","patriarchal","exodus","conquest","judges",
+    "united-monarchy","divided-monarchy","exile","post-exile",
+    "second-temple","nt-gospels","early-church"
+  ];
+  const CAT_ORDER = [
+    "patriarch","matriarch","judge","priest","prophet",
+    "king-judah","king-israel","queen","foreign-king",
+    "apostle","messiah","other"
+  ];
+
+  function buildChips(container, values, hiddenSet) {
+    container.innerHTML = "";
+    values.forEach((v) => {
+      const chip = document.createElement("button");
+      chip.type = "button";
+      chip.className = "chip active";
+      chip.textContent = v.replace(/-/g, "​-"); // allow wrapping after hyphens
+      chip.dataset.value = v;
+      chip.addEventListener("click", () => {
+        if (hiddenSet.has(v)) {
+          hiddenSet.delete(v);
+          chip.classList.add("active");
+        } else {
+          hiddenSet.add(v);
+          chip.classList.remove("active");
+        }
+        render();
+      });
+      container.appendChild(chip);
+    });
+  }
+
+  buildChips(eraContainer, ERA_ORDER, state.hiddenEras);
+  buildChips(catContainer, CAT_ORDER, state.hiddenCats);
+
+  // ── Year axis ─────────────────────────────────────────────────────────────
+  const ERA_LABELS = [
+    { year: -4000, label: "Primeval" },
+    { year: -2000, label: "Patriarchal" },
+    { year: -1250, label: "Exodus / Conquest" },
+    { year: -1150, label: "Judges" },
+    { year: -1020, label: "United Kingdom" },
+    { year:  -931, label: "Divided Kingdom" },
+    { year:  -586, label: "Exile" },
+    { year:  -538, label: "Post-Exile" },
+    { year:     1, label: "New Testament" },
+  ];
+
+  function renderAxis() {
     yearAxis.innerHTML = "";
     yearAxis.style.height = totalHeight() + "px";
-    const ticks = [];
-    // primeval ticks every 500 years
-    for (let y = -4500; y <= -2500; y += 500) ticks.push({ year: y, major: y % 1000 === 0 });
-    // historical ticks every 100 years; majors every 500
-    for (let y = -2100; y <= 100; y += 100) ticks.push({ year: y, major: y % 500 === 0 });
 
-    ticks.forEach((t) => {
+    // year ticks
+    const ticks = [];
+    for (let y = -4500; y <= -2500; y += 500) ticks.push({ y, major: y % 1000 === 0 });
+    for (let y = -2000; y <= HISTORICAL_END; y += 100) ticks.push({ y, major: y % 500 === 0 });
+
+    ticks.forEach(({ y, major }) => {
       const el = document.createElement("div");
-      el.className = "year-label" + (t.major ? " major" : "");
-      el.style.top = yearToY(t.year) + "px";
-      el.textContent = formatYear(t.year);
+      el.className = "year-label" + (major ? " major" : "");
+      el.style.top = yearToY(y) + "px";
+      el.textContent = fmt(y);
+      yearAxis.appendChild(el);
+    });
+
+    // era labels
+    ERA_LABELS.forEach(({ year, label }) => {
+      const el = document.createElement("div");
+      el.className = "era-label";
+      el.style.top = (yearToY(year) + 2) + "px";
+      el.textContent = label;
       yearAxis.appendChild(el);
     });
   }
 
-  // ----- gridlines (rendered into timeline) ----------------------------------
+  // ── Grid lines ────────────────────────────────────────────────────────────
   function renderGrid() {
-    [-4000, -3000, -2500, -2000, -1500, -1000, -500, 0, 100].forEach((y) => {
-      const line = document.createElement("div");
-      line.className = "grid-line major";
-      line.style.top = yearToY(y) + "px";
-      timeline.appendChild(line);
+    [-4000,-3000,-2500,-2000,-1500,-1000,-500,1,100].forEach((y) => {
+      const el = document.createElement("div");
+      el.className = "grid-line major";
+      el.style.top = yearToY(y) + "px";
+      timelineEl.appendChild(el);
     });
     for (let y = -2000; y <= 100; y += 100) {
       if (y % 500 === 0) continue;
-      const line = document.createElement("div");
-      line.className = "grid-line";
-      line.style.top = yearToY(y) + "px";
-      timeline.appendChild(line);
+      const el = document.createElement("div");
+      el.className = "grid-line";
+      el.style.top = yearToY(y) + "px";
+      timelineEl.appendChild(el);
     }
   }
 
-  // ----- person bar ----------------------------------------------------------
+  // ── Person bar ────────────────────────────────────────────────────────────
   function makePersonEl(p) {
+    const cw = colWidth();
     const el = document.createElement("div");
-    el.className = "person cat-" + p.category + " cert-" + p.dateCertainty;
-    if (p.reignStart != null) el.classList.add("has-reign");
+    el.className = `person cat-${p.category} cert-${p.dateCertainty}${p.reignStart != null ? " has-reign" : ""}`;
     el.dataset.id = p.id;
+    el.setAttribute("role", "button");
+    el.setAttribute("tabindex", "0");
+    el.setAttribute("aria-label", p.name + " (" + fmtRange(p.birthYear, p.deathYear) + ")");
 
     const death = p.deathYear != null ? p.deathYear : p.birthYear + 5;
-    const top = yearToY(p.birthYear);
-    const bottom = yearToY(death);
-    const height = Math.max(MIN_BAR_HEIGHT, bottom - top);
-    el.style.top = top + "px";
+    const top    = yearToY(p.birthYear);
+    const height = Math.max(MIN_BAR_H, yearToY(death) - top);
+
+    el.style.top    = top + "px";
     el.style.height = height + "px";
-    el.style.left = (p._column * (COL_WIDTH + COL_GAP)) + "px";
-    el.style.width = COL_WIDTH + "px";
+    el.style.left   = (p._col * (cw + COL_GAP)) + "px";
+    el.style.width  = cw + "px";
 
     if (p.reignStart != null && p.reignEnd != null) {
       const rTop = yearToY(p.reignStart) - top;
-      const rBot = yearToY(p.reignEnd) - top;
-      el.style.setProperty("--reign-top", rTop + "px");
-      el.style.setProperty("--reign-height", (rBot - rTop) + "px");
+      const rBot = yearToY(p.reignEnd)   - top;
+      el.style.setProperty("--reign-top",    rTop + "px");
+      el.style.setProperty("--reign-height", Math.max(0, rBot - rTop) + "px");
     }
 
     const name = document.createElement("span");
@@ -228,238 +257,255 @@
 
     const years = document.createElement("span");
     years.className = "years";
-    years.textContent = formatYearRange(p.birthYear, p.deathYear) +
-      (p.textualAge ? " · " + p.textualAge + " yr" : "");
+    years.textContent = fmtRange(p.birthYear, p.deathYear) +
+      (p.textualAge ? " · " + p.textualAge + "yr" : "");
     el.appendChild(years);
 
-    el.addEventListener("click", (e) => {
-      e.stopPropagation();
-      selectPerson(p.id);
-    });
+    const activate = (e) => { e.stopPropagation(); selectPerson(p.id); };
+    el.addEventListener("click", activate);
+    el.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") activate(e); });
     return el;
   }
 
-  // ----- event band ----------------------------------------------------------
+  // ── Event band ────────────────────────────────────────────────────────────
   function makeEventEl(ev) {
-    const el = document.createElement("div");
     const isSpan = ev.endYear != null && ev.endYear !== ev.year;
+    const el = document.createElement("div");
     el.className = "event-band" + (isSpan ? " span" : "");
     el.dataset.id = ev.id;
 
-    const top = yearToY(ev.year);
-    const bottom = isSpan ? yearToY(ev.endYear) : top + 2;
-    el.style.top = top + "px";
+    const top    = yearToY(ev.year);
+    const bottom = isSpan ? yearToY(ev.endYear) : top;
+    el.style.top    = top + "px";
     el.style.height = Math.max(2, bottom - top) + "px";
 
     const line = document.createElement("div");
     line.className = "event-line";
-    line.style.height = (bottom - top) + "px";
     el.appendChild(line);
 
     const label = document.createElement("div");
     label.className = "event-label";
-    label.textContent = ev.name + " (" + (isSpan
-      ? formatYear(ev.year) + " – " + formatYear(ev.endYear)
-      : formatYear(ev.year)) + ")";
+    label.textContent = ev.name + " (" +
+      (isSpan ? fmt(ev.year) + "–" + fmt(ev.endYear) : fmt(ev.year)) + ")";
     el.appendChild(label);
 
-    el.addEventListener("click", (e) => {
-      e.stopPropagation();
-      selectEvent(ev.id);
-    });
+    el.addEventListener("click", (e) => { e.stopPropagation(); selectEvent(ev.id); });
     return el;
   }
 
-  // ----- main render ---------------------------------------------------------
+  // ── Main render ───────────────────────────────────────────────────────────
   let selectedId = null;
 
   function render() {
-    timeline.innerHTML = "";
-    timeline.style.height = totalHeight() + "px";
+    timelineEl.innerHTML = "";
+    timelineEl.style.height = totalHeight() + "px";
     renderGrid();
 
-    // events first so people overlay them
     BibleTimeline.events.forEach((ev) => {
-      if (!matchesEvent(ev)) return;
-      timeline.appendChild(makeEventEl(ev));
+      if (matchEvent(ev)) timelineEl.appendChild(makeEventEl(ev));
     });
 
-    const visiblePeople = BibleTimeline.people.filter(matchesPerson);
-    const colCount = assignColumns(visiblePeople);
-    const minWidth = colCount * (COL_WIDTH + COL_GAP) + 320; // leave room for event labels
-    timeline.style.minWidth = minWidth + "px";
+    const visible = BibleTimeline.people.filter(matchPerson);
+    const cols    = assignColumns(visible);
+    const cw      = colWidth();
+    const minW    = cols * (cw + COL_GAP) + 280;
+    timelineEl.style.minWidth = minW + "px";
 
-    visiblePeople.forEach((p) => timeline.appendChild(makePersonEl(p)));
+    visible.forEach((p) => timelineEl.appendChild(makePersonEl(p)));
 
     if (selectedId) {
-      const sel = timeline.querySelector('.person[data-id="' + selectedId + '"]');
+      const sel = timelineEl.querySelector(`.person[data-id="${selectedId}"]`);
       if (sel) sel.classList.add("selected");
     }
 
-    renderYearAxis();
+    renderAxis();
   }
 
-  function applyFilters() {
-    render();
+  // ── Detail panel ──────────────────────────────────────────────────────────
+  function esc(s) {
+    return String(s ?? "").replace(/[&<>"']/g, (c) =>
+      ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
   }
-
-  // ----- detail panel --------------------------------------------------------
-  function selectPerson(id) {
-    selectedId = id;
-    const p = peopleById[id];
-    if (!p) return;
-    detailContent.innerHTML = renderPersonDetail(p);
-    openDetail();
-    timeline.querySelectorAll(".person.selected").forEach((el) => el.classList.remove("selected"));
-    const sel = timeline.querySelector('.person[data-id="' + id + '"]');
-    if (sel) sel.classList.add("selected");
-    wireRelationLinks();
+  function field(key, val) {
+    if (!val) return "";
+    return `<div class="field"><div class="key">${esc(key)}</div><div class="val">${val}</div></div>`;
   }
-  function selectEvent(id) {
-    const ev = BibleTimeline.events.find((e) => e.id === id);
-    if (!ev) return;
-    detailContent.innerHTML = renderEventDetail(ev);
-    openDetail();
-    wireRelationLinks();
-  }
-  function openDetail() {
-    detailPanel.classList.add("open");
-    detailPanel.setAttribute("aria-hidden", "false");
-  }
-  function close() {
-    detailPanel.classList.remove("open");
-    detailPanel.setAttribute("aria-hidden", "true");
-  }
-  closeDetail.addEventListener("click", close);
-  document.addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });
-
-  function escape(s) {
-    return String(s).replace(/[&<>"']/g, (c) => ({
-      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
-    }[c]));
-  }
-
-  function field(key, value) {
-    if (!value) return "";
-    return '<div class="field"><div class="key">' + escape(key) + '</div><div class="val">' + value + '</div></div>';
-  }
-
-  function relationLinks(ids) {
-    if (!ids || !ids.length) return "";
+  function relLinks(ids) {
+    if (!ids?.length) return "";
     return ids.map((id) => {
-      const p = peopleById[id];
-      const label = p ? p.name : id;
-      return '<a class="relation" data-id="' + escape(id) + '">' + escape(label) + '</a>';
+      const p = byId[id];
+      return `<a class="relation" data-id="${esc(id)}">${esc(p ? p.name : id)}</a>`;
     }).join("");
   }
-  function tagLinks(tags) {
-    if (!tags || !tags.length) return "";
-    return tags.map((t) => '<span class="tag">' + escape(t) + '</span>').join("");
+  function tags(list) {
+    return (list||[]).map((t) => `<span class="tag">${esc(t)}</span>`).join("");
   }
 
-  function renderPersonDetail(p) {
-    const subtitle = [
-      p.category && p.category.replace(/-/g, " "),
-      p.era && p.era.replace(/-/g, " "),
-      p.testament,
-    ].filter(Boolean).join(" · ");
-
-    const dates = formatYearRange(p.birthYear, p.deathYear) +
-      (p.textualAge ? " &nbsp;·&nbsp; lived " + p.textualAge + " years (text)" : "");
+  function personDetailHTML(p) {
+    const subtitle = [p.category?.replace(/-/g," "), p.era?.replace(/-/g," "), p.testament]
+      .filter(Boolean).join(" · ");
+    const dates = esc(fmtRange(p.birthYear, p.deathYear)) +
+      (p.textualAge ? ` &nbsp;·&nbsp; ${p.textualAge} yrs (text)` : "");
     const reign = (p.reignStart != null && p.reignEnd != null)
-      ? formatYearRange(p.reignStart, p.reignEnd) + " (" + (p.reignEnd - p.reignStart) + " yr)"
-      : "";
-
-    const certaintyNote = {
-      firm: "Widely accepted academic date.",
-      approximate: "Mainstream academic estimate; scholars differ.",
-      textual: "Date derived from biblical text (Genesis 5/11), not historical evidence.",
-      legendary: "Figure not historically attested."
-    }[p.dateCertainty] || "";
-
-    const refs = (p.references || []).map((r) => "<li>" + escape(r) + "</li>").join("");
-
-    return [
-      '<h2>' + escape(p.name) + '</h2>',
-      '<div class="subtitle">' + escape(subtitle) + '</div>',
-      field("Dates", escape(dates)),
-      field("Reign", escape(reign)),
-      field("Book", escape(p.book || "")),
-      field("Parents", relationLinks(p.parents)),
-      field("Spouses", relationLinks(p.spouses)),
-      field("Children", relationLinks(p.children)),
-      p.description ? '<div class="desc">' + escape(p.description) + '</div>' : "",
-      refs ? '<div class="field"><div class="key">Refs</div><div class="val"><ul class="refs">' + refs + "</ul></div></div>" : "",
-      p.tags && p.tags.length ? '<div class="field"><div class="key">Tags</div><div class="val">' + tagLinks(p.tags) + "</div></div>" : "",
-      certaintyNote ? '<div class="field"><div class="key">Certainty</div><div class="val">' + escape(certaintyNote) + "</div></div>" : ""
-    ].join("");
+      ? esc(fmtRange(p.reignStart, p.reignEnd)) + ` (${p.reignEnd - p.reignStart} yr)` : "";
+    const certaintyMap = {
+      firm:       "Widely accepted academic date.",
+      approximate:"Mainstream academic estimate; scholars differ.",
+      textual:    "Derived from biblical genealogies (Genesis 5/11), not independent historical evidence.",
+      legendary:  "Not historically attested."
+    };
+    const refs = (p.references||[]).map((r) => `<li>${esc(r)}</li>`).join("");
+    return `
+      <h2>${esc(p.name)}</h2>
+      <div class="subtitle">${esc(subtitle)}</div>
+      ${field("Dates", dates)}
+      ${reign ? field("Reign", reign) : ""}
+      ${field("Book", esc(p.book||""))}
+      ${field("Parents",  relLinks(p.parents))}
+      ${field("Spouses",  relLinks(p.spouses))}
+      ${field("Children", relLinks(p.children))}
+      ${p.description ? `<div class="desc">${esc(p.description)}</div>` : ""}
+      ${refs ? field("References", `<ul class="refs">${refs}</ul>`) : ""}
+      ${p.tags?.length ? field("Tags", tags(p.tags)) : ""}
+      ${field("Certainty", esc(certaintyMap[p.dateCertainty]||""))}
+    `;
   }
 
-  function renderEventDetail(ev) {
+  function eventDetailHTML(ev) {
     const isSpan = ev.endYear != null && ev.endYear !== ev.year;
-    const dates = isSpan ? formatYear(ev.year) + " – " + formatYear(ev.endYear) : formatYear(ev.year);
-    const refs = (ev.references || []).map((r) => "<li>" + escape(r) + "</li>").join("");
-    return [
-      '<h2>' + escape(ev.name) + '</h2>',
-      '<div class="subtitle">' + escape((ev.category || "event").replace(/-/g, " ") + " · " + (ev.testament || "")) + '</div>',
-      field("Date", escape(dates)),
-      ev.description ? '<div class="desc">' + escape(ev.description) + '</div>' : "",
-      ev.participants && ev.participants.length ? field("Participants", relationLinks(ev.participants)) : "",
-      refs ? '<div class="field"><div class="key">Refs</div><div class="val"><ul class="refs">' + refs + "</ul></div></div>" : "",
-      ev.tags && ev.tags.length ? '<div class="field"><div class="key">Tags</div><div class="val">' + tagLinks(ev.tags) + "</div></div>" : ""
-    ].join("");
+    const dates  = isSpan ? fmt(ev.year)+"–"+fmt(ev.endYear) : fmt(ev.year);
+    const refs   = (ev.references||[]).map((r) => `<li>${esc(r)}</li>`).join("");
+    return `
+      <h2>${esc(ev.name)}</h2>
+      <div class="subtitle">${esc((ev.category||"event").replace(/-/g," "))} · ${esc(ev.testament||"")}</div>
+      ${field("Date", esc(dates))}
+      ${ev.description ? `<div class="desc">${esc(ev.description)}</div>` : ""}
+      ${ev.participants?.length ? field("People", relLinks(ev.participants)) : ""}
+      ${refs ? field("References", `<ul class="refs">${refs}</ul>`) : ""}
+      ${ev.tags?.length ? field("Tags", tags(ev.tags)) : ""}
+    `;
   }
 
-  function wireRelationLinks() {
+  function openDetail(html) {
+    detailContent.innerHTML = html;
+    detailPanel.classList.add("open");
+    detailPanel.setAttribute("aria-hidden", "false");
+    detailScrim.classList.add("open");
+    // wire relation links
     detailContent.querySelectorAll("a.relation").forEach((a) => {
       a.addEventListener("click", (e) => {
         e.preventDefault();
         const id = a.dataset.id;
-        if (peopleById[id]) {
-          selectPerson(id);
-          scrollPersonIntoView(id);
-        }
+        if (byId[id]) { selectPerson(id); scrollTo(id); }
       });
     });
   }
 
-  function scrollPersonIntoView(id) {
-    const el = timeline.querySelector('.person[data-id="' + id + '"]');
-    if (!el) return;
-    const top = parseFloat(el.style.top) - 200;
-    window.scrollTo({ top, behavior: "smooth" });
+  function closeDetail() {
+    detailPanel.classList.remove("open");
+    detailPanel.setAttribute("aria-hidden", "true");
+    detailScrim.classList.remove("open");
+    timelineEl.querySelectorAll(".person.selected").forEach((el) => el.classList.remove("selected"));
+    selectedId = null;
   }
 
-  // ----- input wiring --------------------------------------------------------
-  let searchTimer = null;
-  searchInput.addEventListener("input", () => {
-    clearTimeout(searchTimer);
-    searchTimer = setTimeout(() => {
-      state.search = searchInput.value.trim();
-      applyFilters();
-    }, 150);
-  });
-  toggleEvents.addEventListener("change", () => { state.showEvents = toggleEvents.checked; applyFilters(); });
-  toggleTextual.addEventListener("change", () => { state.showTextual = toggleTextual.checked; applyFilters(); });
-  toggleOT.addEventListener("change", () => { state.showOT = toggleOT.checked; applyFilters(); });
-  toggleNT.addEventListener("change", () => { state.showNT = toggleNT.checked; applyFilters(); });
-  zoomSlider.addEventListener("input", () => {
-    zoom = parseFloat(zoomSlider.value);
-    render();
-  });
-  resetBtn.addEventListener("click", () => {
-    state.search = ""; searchInput.value = "";
-    state.eras.clear(); state.categories.clear();
-    [...eraFilters.querySelectorAll('input')].forEach(cb => cb.checked = true);
-    [...categoryFilters.querySelectorAll('input')].forEach(cb => cb.checked = true);
-    state.showEvents = true; toggleEvents.checked = true;
-    state.showTextual = true; toggleTextual.checked = true;
-    state.showOT = true; toggleOT.checked = true;
-    state.showNT = true; toggleNT.checked = true;
-    applyFilters();
+  function selectPerson(id) {
+    selectedId = id;
+    timelineEl.querySelectorAll(".person.selected").forEach((el) => el.classList.remove("selected"));
+    const sel = timelineEl.querySelector(`.person[data-id="${id}"]`);
+    if (sel) sel.classList.add("selected");
+    openDetail(personDetailHTML(byId[id]));
+  }
+
+  function selectEvent(id) {
+    const ev = BibleTimeline.events.find((e) => e.id === id);
+    if (ev) openDetail(eventDetailHTML(ev));
+  }
+
+  function scrollTo(id) {
+    const el = timelineEl.querySelector(`.person[data-id="${id}"]`);
+    if (!el) return;
+    window.scrollTo({ top: Math.max(0, parseFloat(el.style.top) - 200), behavior: "smooth" });
+  }
+
+  // ── Filter drawer wiring ──────────────────────────────────────────────────
+  function openDrawer() {
+    filterDrawer.classList.add("open");
+    filterDrawer.setAttribute("aria-hidden", "false");
+    drawerScrim.classList.add("open");
+    menuToggle.setAttribute("aria-expanded", "true");
+  }
+  function closeDrawer() {
+    filterDrawer.classList.remove("open");
+    filterDrawer.setAttribute("aria-hidden", "true");
+    drawerScrim.classList.remove("open");
+    menuToggle.setAttribute("aria-expanded", "false");
+  }
+
+  menuToggle.addEventListener("click", () =>
+    filterDrawer.classList.contains("open") ? closeDrawer() : openDrawer());
+  closeDrawerBtn.addEventListener("click", closeDrawer);
+  drawerScrim.addEventListener("click", closeDrawer);
+
+  // close drawer on Escape
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      if (filterDrawer.classList.contains("open")) { closeDrawer(); return; }
+      if (detailPanel.classList.contains("open"))  { closeDetail(); }
+    }
   });
 
-  document.addEventListener("DOMContentLoaded", render);
-  // also run immediately if DOM already ready
-  if (document.readyState !== "loading") render();
+  closeDetailBtn.addEventListener("click", closeDetail);
+  detailScrim.addEventListener("click", closeDetail);
+
+  // ── Zoom ──────────────────────────────────────────────────────────────────
+  function setZoom(z) {
+    zoom = Math.min(2, Math.max(0.4, Math.round(z * 10) / 10));
+    zoomSlider.value = zoom;
+    render();
+  }
+  zoomSlider.addEventListener("input", () => setZoom(parseFloat(zoomSlider.value)));
+  zoomInBtn.addEventListener("click",  () => setZoom(zoom + 0.2));
+  zoomOutBtn.addEventListener("click", () => setZoom(zoom - 0.2));
+
+  // ── Toggle switches ───────────────────────────────────────────────────────
+  toggleEvents.addEventListener("change",  () => { state.showEvents  = toggleEvents.checked;  render(); });
+  toggleTextual.addEventListener("change", () => { state.showTextual = toggleTextual.checked; render(); });
+  toggleOT.addEventListener("change",      () => { state.showOT      = toggleOT.checked;      render(); });
+  toggleNT.addEventListener("change",      () => { state.showNT      = toggleNT.checked;      render(); });
+
+  // ── Search ────────────────────────────────────────────────────────────────
+  let searchTimer;
+  searchInput.addEventListener("input", () => {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => { state.search = searchInput.value.trim(); render(); }, 150);
+  });
+
+  // ── Reset ─────────────────────────────────────────────────────────────────
+  resetBtn.addEventListener("click", () => {
+    state.search = ""; searchInput.value = "";
+    state.hiddenEras.clear(); state.hiddenCats.clear();
+    eraContainer.querySelectorAll(".chip").forEach((c) => c.classList.add("active"));
+    catContainer.querySelectorAll(".chip").forEach((c) => c.classList.add("active"));
+    state.showEvents  = true; toggleEvents.checked  = true;
+    state.showTextual = true; toggleTextual.checked = true;
+    state.showOT      = true; toggleOT.checked      = true;
+    state.showNT      = true; toggleNT.checked      = true;
+    setZoom(1);
+    render();
+  });
+
+  // ── Resize ────────────────────────────────────────────────────────────────
+  let resizeTimer;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(render, 120);
+  });
+
+  // ── Boot ──────────────────────────────────────────────────────────────────
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", render);
+  } else {
+    render();
+  }
 })();
