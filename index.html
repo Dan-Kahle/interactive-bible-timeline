@@ -3,52 +3,106 @@
 <head>
   <meta charset="utf-8">
   <title>Interactive Bible Timeline</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#1c1810">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header class="topbar">
-    <div class="topbar-inner">
-      <h1>Interactive Bible Timeline</h1>
-      <div class="controls">
-        <input type="search" id="search" placeholder="Search by name or tag...">
-        <details class="filter-group">
-          <summary>Era</summary>
-          <div id="eraFilters" class="filter-list"></div>
-        </details>
-        <details class="filter-group">
-          <summary>Category</summary>
-          <div id="categoryFilters" class="filter-list"></div>
-        </details>
-        <details class="filter-group">
-          <summary>Display</summary>
-          <div class="filter-list">
-            <label><input type="checkbox" id="toggleEvents" checked> Show events</label>
-            <label><input type="checkbox" id="toggleTextual" checked> Show primeval (textual dates)</label>
-            <label><input type="checkbox" id="toggleOT" checked> Old Testament</label>
-            <label><input type="checkbox" id="toggleNT" checked> New Testament</label>
-            <label>Zoom <input type="range" id="zoom" min="0.4" max="2" step="0.1" value="1"></label>
-          </div>
-        </details>
-        <button id="resetFilters" type="button">Reset filters</button>
+  <header class="topbar" role="banner">
+    <div class="topbar-row primary">
+      <button class="icon-btn menu-btn" id="menuToggle" aria-label="Open filters" aria-controls="filterDrawer" aria-expanded="false">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+          <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+        </svg>
+      </button>
+      <h1>Bible Timeline</h1>
+      <button class="icon-btn" id="zoomOut" aria-label="Zoom out">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
+      </button>
+      <button class="icon-btn" id="zoomIn" aria-label="Zoom in">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
+      </button>
+    </div>
+    <div class="topbar-row search-row">
+      <div class="search-wrap">
+        <svg class="search-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+          <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2" fill="none"/>
+          <path d="m20 20-3-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <input type="search" id="search" placeholder="Search people, places, tags...">
       </div>
-      <p class="meta-note">
-        Academic chronology (late-date Exodus, Thiele's kings).
-        Primeval ages are from the Masoretic Text and shown on a compressed scale.
-        Click any bar for details.
-      </p>
     </div>
   </header>
 
-  <main class="timeline-wrap">
-    <div id="yearAxis" class="year-axis"></div>
-    <div id="timeline" class="timeline"></div>
+  <aside class="filter-drawer" id="filterDrawer" aria-hidden="true">
+    <div class="filter-drawer-inner">
+      <div class="drawer-head">
+        <h2>Filters</h2>
+        <button class="icon-btn" id="closeDrawer" aria-label="Close filters">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+
+      <section class="filter-section">
+        <h3>Era</h3>
+        <div class="chip-group" id="eraFilters"></div>
+      </section>
+
+      <section class="filter-section">
+        <h3>Role</h3>
+        <div class="chip-group" id="categoryFilters"></div>
+      </section>
+
+      <section class="filter-section">
+        <h3>Testament</h3>
+        <div class="chip-group">
+          <label class="chip toggle-chip"><input type="checkbox" id="toggleOT" checked><span>Old Testament</span></label>
+          <label class="chip toggle-chip"><input type="checkbox" id="toggleNT" checked><span>New Testament</span></label>
+        </div>
+      </section>
+
+      <section class="filter-section">
+        <h3>Display</h3>
+        <div class="chip-group">
+          <label class="chip toggle-chip"><input type="checkbox" id="toggleEvents" checked><span>Events</span></label>
+          <label class="chip toggle-chip"><input type="checkbox" id="toggleTextual" checked><span>Primeval era</span></label>
+        </div>
+      </section>
+
+      <section class="filter-section">
+        <h3>Zoom</h3>
+        <input type="range" id="zoom" min="0.4" max="2" step="0.1" value="1">
+        <div class="range-ticks"><span>compact</span><span>spacious</span></div>
+      </section>
+
+      <button class="btn ghost" id="resetFilters" type="button">Reset filters</button>
+
+      <p class="legend-note">
+        Academic chronology: late-date Exodus (~1250 BC), Thiele's chronology for the kings.
+        Genesis 5/11 ages from the Masoretic Text are shown on a compressed band and labeled as textual.
+      </p>
+    </div>
+  </aside>
+  <div class="drawer-scrim" id="drawerScrim" aria-hidden="true"></div>
+
+  <main class="timeline-shell" role="main">
+    <div class="timeline-scroll" id="timelineScroll">
+      <div class="year-axis" id="yearAxis" aria-hidden="true"></div>
+      <div class="timeline" id="timeline"></div>
+    </div>
   </main>
 
-  <aside id="detailPanel" class="detail-panel" aria-hidden="true">
-    <button id="closeDetail" class="close-btn" aria-label="Close">&times;</button>
-    <div id="detailContent"></div>
+  <aside class="detail-panel" id="detailPanel" aria-hidden="true" aria-label="Details">
+    <div class="detail-handle" aria-hidden="true"></div>
+    <button class="close-btn icon-btn" id="closeDetail" aria-label="Close details">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <div class="detail-content" id="detailContent"></div>
   </aside>
+  <div class="detail-scrim" id="detailScrim" aria-hidden="true"></div>
 
   <script src="data.js"></script>
   <script src="timeline.js"></script>
