@@ -77,6 +77,10 @@
   // ── Data index ───────────────────────────────────────────────────────────
   const byId = {};
   BibleTimeline.people.forEach((p) => { byId[p.id] = p; });
+  const eventById = {};
+  BibleTimeline.events.forEach((ev) => { eventById[ev.id] = ev; });
+  const bookById = {};
+  (BibleTimeline.books || []).forEach((b) => { bookById[b.id] = b; });
 
   // ── Filter state ─────────────────────────────────────────────────────────
   const state = {
@@ -87,7 +91,12 @@
     showTextual: true,
     showOT:      true,
     showNT:      true,
+    showWorld:   true,   // non-biblical kingdoms / events
+    showBooks:   true,   // book brackets / chips
   };
+  function isWorld(ev) {
+    return ev.category === "world-empire" || ev.category === "world-event";
+  }
 
   // ── Column packing ───────────────────────────────────────────────────────
   const COL_GAP   = 4;
@@ -123,7 +132,11 @@
     return true;
   }
   function matchEvent(ev) {
-    if (!state.showEvents) return false;
+    if (isWorld(ev)) {
+      if (!state.showWorld) return false;
+    } else {
+      if (!state.showEvents) return false;
+    }
     if (!state.showOT && ev.testament === "OT") return false;
     if (!state.showNT && ev.testament === "NT") return false;
     if (state.search) {
@@ -267,7 +280,9 @@
     const naturalBot = isSpan ? yearToY(ev.endYear) : naturalTop;
 
     const el = document.createElement("div");
-    el.className = "event-band" + (isSpan ? " span" : "");
+    el.className = "event-band"
+      + (isSpan ? " span" : "")
+      + (isWorld(ev) ? " world" : "");
     el.dataset.id = ev.id;
     el.style.top    = naturalTop + "px";
     el.style.height = Math.max(2, naturalBot - naturalTop) + "px";
@@ -309,6 +324,77 @@
   }
 
   // ── Desktop bar-chart render ─────────────────────────────────────────────
+  // ── Book bracket helpers (desktop) ───────────────────────────────────────
+  const BOOK_COL_W = 56;
+  const BOOK_GAP   = 3;
+
+  function bookSpan(b) {
+    // Visualize as covered period for narrative books; for wisdom & epistles
+    // where coversFrom == coversTo or coverage is single year, use writtenFrom..writtenTo.
+    let from = b.coversFrom, to = b.coversTo ?? b.coversFrom;
+    if (from == null) { from = b.writtenFrom; to = b.writtenTo ?? b.writtenFrom; }
+    if (to - from < 2) {
+      from = b.writtenFrom ?? from;
+      to   = b.writtenTo   ?? to;
+    }
+    return { from, to: Math.max(to, from + 2) };
+  }
+
+  function visibleBooks() {
+    if (!state.showBooks) return [];
+    return (BibleTimeline.books || []).filter((b) => {
+      if (!state.showOT && b.testament === "OT") return false;
+      if (!state.showNT && b.testament === "NT") return false;
+      if (state.search) {
+        const q = state.search.toLowerCase();
+        const hay = [b.name, b.section||"", b.author||"", b.description||""].join(" ").toLowerCase();
+        if (!hay.includes(q)) return false;
+      }
+      return true;
+    });
+  }
+
+  function assignBookColumns(books) {
+    const sorted = books.slice().sort((a, b) => bookSpan(a).from - bookSpan(b).from);
+    const ends = [];
+    sorted.forEach((b) => {
+      const s = bookSpan(b);
+      let col = ends.findIndex((e) => e <= s.from);
+      if (col === -1) { col = ends.length; ends.push(s.to); }
+      else ends[col] = s.to;
+      b._bcol = col;
+    });
+    return ends.length;
+  }
+
+  function makeBookEl(b) {
+    const s = bookSpan(b);
+    const top  = yearToY(s.from);
+    const bot  = yearToY(s.to);
+    const el   = document.createElement("div");
+    el.className = `book book--${b.section}`;
+    el.dataset.id = b.id;
+    el.setAttribute("role", "button");
+    el.setAttribute("tabindex", "0");
+    el.setAttribute("aria-label", `${b.name} (${b.testament})`);
+    el.style.top    = top + "px";
+    el.style.height = Math.max(20, bot - top) + "px";
+    el.style.left   = (b._bcol * (BOOK_COL_W + BOOK_GAP)) + "px";
+    el.style.width  = BOOK_COL_W + "px";
+
+    const label = document.createElement("div");
+    label.className = "book__label";
+    label.textContent = b.name;
+    el.appendChild(label);
+
+    const activate = (e) => { e.stopPropagation(); selectBook(b.id); };
+    el.addEventListener("click", activate);
+    el.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") activate(e);
+    });
+    return el;
+  }
+
   function renderDesktop() {
     timelineScroll.classList.remove("mobile-mode");
     timelineEl.classList.remove("list-view");
@@ -318,17 +404,30 @@
 
     renderGrid();
 
+    // Books lane on the left
+    const books    = visibleBooks();
+    const bookCols = assignBookColumns(books);
+    const booksLaneW = bookCols > 0 ? bookCols * (BOOK_COL_W + BOOK_GAP) + 8 : 0;
+
     const visible = BibleTimeline.people.filter(matchPerson);
     const cols    = assignColumns(visible);
     const cw      = colWidth();
 
     // Event-label column starts after the rightmost person column
-    const eventLabelX = cols * (cw + COL_GAP) + 16;
+    const peopleStartX = booksLaneW;
+    const eventLabelX  = peopleStartX + cols * (cw + COL_GAP) + 16;
     const minW = eventLabelX + 320;
     timelineEl.style.minWidth = minW + "px";
 
-    // Append people first
-    visible.forEach((p) => timelineEl.appendChild(makePersonEl(p)));
+    // Books first (behind)
+    books.forEach((b) => timelineEl.appendChild(makeBookEl(b)));
+
+    // Append people, shifted right by booksLaneW
+    visible.forEach((p) => {
+      const el = makePersonEl(p);
+      el.style.left = (peopleStartX + p._col * (cw + COL_GAP)) + "px";
+      timelineEl.appendChild(el);
+    });
 
     // Smart event label placement: sort by year, push labels down if too close
     const LABEL_MIN_GAP = 26;
@@ -367,6 +466,34 @@
     "nt-gospels":       "Gospels & Jesus' Life",
     "early-church":     "Early Church",
   };
+  const ERA_BOUNDS = {
+    "primeval":         [-4500, -2100],
+    "patriarchal":      [-2100, -1500],
+    "exodus":           [-1500, -1200],
+    "conquest":         [-1210, -1180],
+    "judges":           [-1200, -1050],
+    "united-monarchy":  [-1050, -931],
+    "divided-monarchy": [-931,  -586],
+    "exile":            [-586,  -538],
+    "post-exile":       [-538,  -400],
+    "second-temple":    [-400,    -5],
+    "nt-gospels":       [-5,      35],
+    "early-church":     [30,     110],
+  };
+
+  function booksCoveringEra(era) {
+    const bounds = ERA_BOUNDS[era];
+    if (!bounds || !state.showBooks) return [];
+    const [from, to] = bounds;
+    return (BibleTimeline.books || []).filter((b) => {
+      if (!state.showOT && b.testament === "OT") return false;
+      if (!state.showNT && b.testament === "NT") return false;
+      const bf = b.coversFrom ?? b.writtenFrom;
+      const bt = b.coversTo   ?? b.writtenTo ?? bf;
+      if (bf == null) return false;
+      return bf <= to && bt >= from;
+    });
+  }
 
   function renderMobileList() {
     timelineScroll.classList.add("mobile-mode");
@@ -404,7 +531,31 @@
         heading.className = "list-era-head";
         heading.style.top = topbarH + "px";
         heading.dataset.era = era;
-        heading.textContent = ERA_DISPLAY[era] ?? era.replace(/-/g, " ");
+
+        const eraName = document.createElement("span");
+        eraName.className = "list-era-head__name";
+        eraName.textContent = ERA_DISPLAY[era] ?? era.replace(/-/g, " ");
+        heading.appendChild(eraName);
+
+        // Books covering this era — small horizontal scroll of chips
+        const books = booksCoveringEra(era);
+        if (books.length) {
+          const chips = document.createElement("div");
+          chips.className = "list-era-head__books";
+          books.forEach((b) => {
+            const chip = document.createElement("button");
+            chip.type = "button";
+            chip.className = `book-chip book-chip--${b.section}`;
+            chip.textContent = b.name;
+            chip.addEventListener("click", (e) => {
+              e.stopPropagation();
+              selectBook(b.id);
+            });
+            chips.appendChild(chip);
+          });
+          heading.appendChild(chips);
+        }
+
         timelineEl.appendChild(heading);
       }
       const card = item.type === "person"
@@ -644,6 +795,32 @@
     `;
   }
 
+  function bookDetailHTML(b) {
+    const SECTION_LABELS = {
+      "torah": "Torah / Pentateuch",
+      "history": "Historical Books (OT)",
+      "wisdom": "Wisdom & Poetry",
+      "major-prophets": "Major Prophets",
+      "minor-prophets": "Minor Prophets",
+      "gospels": "Gospel",
+      "history-nt": "Historical Books (NT)",
+      "epistles": "Epistles",
+      "apocalypse": "Apocalypse",
+    };
+    const subtitle = [SECTION_LABELS[b.section] || b.section, b.testament,
+      b.chapters ? b.chapters + " ch" : ""].filter(Boolean).join(" · ");
+    const covers  = (b.coversFrom != null) ? fmtRange(b.coversFrom, b.coversTo) : "";
+    const written = (b.writtenFrom != null) ? fmtRange(b.writtenFrom, b.writtenTo) : "";
+    return `
+      <h2>${esc(b.name)}</h2>
+      <div class="subtitle">${esc(subtitle)}</div>
+      ${covers  ? field("Covers",   esc(covers))  : ""}
+      ${written ? field("Written",  esc(written)) : ""}
+      ${b.author ? field("Author", esc(b.author)) : ""}
+      ${b.description ? `<div class="desc">${esc(b.description)}</div>` : ""}
+    `;
+  }
+
   function openDetail(html) {
     detailContent.innerHTML = html;
     detailPanel.classList.add("open");
@@ -674,8 +851,12 @@
     openDetail(personDetailHTML(byId[id]));
   }
   function selectEvent(id) {
-    const ev = BibleTimeline.events.find((e) => e.id === id);
+    const ev = eventById[id];
     if (ev) openDetail(eventDetailHTML(ev));
+  }
+  function selectBook(id) {
+    const b = bookById[id];
+    if (b) openDetail(bookDetailHTML(b));
   }
   function scrollToPerson(id) {
     const el = timelineEl.querySelector(`[data-id="${id}"]`);
@@ -759,6 +940,10 @@
   toggleTextual.addEventListener("change", () => { state.showTextual = toggleTextual.checked; render(); });
   toggleOT.addEventListener("change",      () => { state.showOT      = toggleOT.checked;      render(); });
   toggleNT.addEventListener("change",      () => { state.showNT      = toggleNT.checked;      render(); });
+  const toggleWorld = $("toggleWorld");
+  const toggleBooks = $("toggleBooks");
+  toggleWorld?.addEventListener("change", () => { state.showWorld = toggleWorld.checked; render(); });
+  toggleBooks?.addEventListener("change", () => { state.showBooks = toggleBooks.checked; render(); });
 
   let searchTimer;
   searchInput.addEventListener("input", () => {
@@ -775,6 +960,8 @@
     state.showTextual = true; toggleTextual.checked = true;
     state.showOT      = true; toggleOT.checked      = true;
     state.showNT      = true; toggleNT.checked      = true;
+    state.showWorld   = true; if (toggleWorld) toggleWorld.checked = true;
+    state.showBooks   = true; if (toggleBooks) toggleBooks.checked = true;
     setZoom(1);
     render();
   });

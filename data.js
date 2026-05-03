@@ -1911,6 +1911,832 @@ BibleTimeline.events.push(
   }
 );
 
+// =============================================================
+// WORLD HISTORY — non-biblical kingdoms, empires & events
+// =============================================================
+BibleTimeline.events.push(
+  {
+    id: "sumer", name: "Sumerian civilization",
+    year: -3500, endYear: -2000,
+    dateCertainty: "firm", category: "world-empire", testament: "OT",
+    description: "First known civilization in southern Mesopotamia. Invented cuneiform, the wheel, and the city-state. Cities like Ur, Uruk, and Eridu flourished.",
+    tags: ["mesopotamia", "world-history"]
+  },
+  {
+    id: "egypt-old-kingdom", name: "Egyptian Old Kingdom",
+    year: -2686, endYear: -2181,
+    dateCertainty: "firm", category: "world-empire", testament: "OT",
+    description: "Age of the great pyramid builders (Djoser, Khufu/Cheops, Khafre, Menkaure). Capital at Memphis. Ended in collapse and the First Intermediate Period.",
+    tags: ["egypt", "pyramids", "world-history"]
+  },
+  {
+    id: "akkadian-empire", name: "Akkadian Empire",
+    year: -2334, endYear: -2154,
+    dateCertainty: "firm", category: "world-empire", testament: "OT",
+    description: "First true empire in human history, founded by Sargon the Great. Unified Sumer and Akkad under one rule.",
+    tags: ["mesopotamia", "world-history"]
+  },
+  {
+    id: "ur-iii", name: "Third Dynasty of Ur",
+    year: -2112, endYear: -2004,
+    dateCertainty: "firm", category: "world-empire", testament: "OT",
+    description: "Sumerian renaissance after the Akkadian collapse. The Ur Abraham left was a leading city of this era.",
+    tags: ["mesopotamia", "ur", "world-history"]
+  },
+  {
+    id: "egypt-middle-kingdom", name: "Egyptian Middle Kingdom",
+    year: -2055, endYear: -1650,
+    dateCertainty: "firm", category: "world-empire", testament: "OT",
+    description: "Reunified Egypt with capital at Thebes. The era of Joseph and the patriarchs in Egypt likely overlaps the late Middle Kingdom and the Second Intermediate Period.",
+    tags: ["egypt", "world-history"]
+  },
+  {
+    id: "old-babylonian", name: "Old Babylonian Empire (Hammurabi)",
+    year: -1894, endYear: -1595,
+    dateCertainty: "firm", category: "world-empire", testament: "OT",
+    description: "Babylon's first dominance under Hammurabi (~1810-1750 BC), famous for his law code. Contemporary of the patriarchs.",
+    tags: ["babylon", "hammurabi", "world-history"]
+  },
+  {
+    id: "hyksos-period", name: "Hyksos rule in Egypt",
+    year: -1650, endYear: -1550,
+    dateCertainty: "firm", category: "world-empire", testament: "OT",
+    description: "Semitic rulers governed Lower Egypt during the Second Intermediate Period. Many scholars place Joseph's rise to power and Israel's settlement in Goshen during or just before this era.",
+    tags: ["egypt", "world-history"]
+  },
+  {
+    id: "egypt-new-kingdom", name: "Egyptian New Kingdom",
+    year: -1550, endYear: -1077,
+    dateCertainty: "firm", category: "world-empire", testament: "OT",
+    description: "Egypt's imperial age. Built the temples at Karnak and Luxor. The Pharaohs of the Exodus belong to this period (18th-19th dynasties).",
+    tags: ["egypt", "world-history", "exodus-context"]
+  },
+  {
+    id: "hittite-empire", name: "Hittite Empire",
+    year: -1600, endYear: -1178,
+    dateCertainty: "firm", category: "world-empire", testament: "OT",
+    description: "Indo-European empire centered in Anatolia. Rivaled Egypt for control of the Levant; fought the Battle of Kadesh against Ramses II (1274 BC). Hittites appear in Genesis (Abraham buys Machpelah from Ephron the Hittite) and 2 Samuel (Uriah).",
+    tags: ["hittites", "world-history"]
+  },
+  {
+    id: "battle-kadesh", name: "Battle of Kadesh",
+    year: -1274, endYear: null,
+    dateCertainty: "firm", category: "world-event", testament: "OT",
+    description: "Massive chariot battle between Ramses II of Egypt and Muwatalli II of the Hittites. Ended in tactical stalemate; led to the first known peace treaty in history.",
+    tags: ["egypt", "hittites", "world-history"]
+  },
+  {
+    id: "bronze-age-collapse", name: "Late Bronze Age Collapse",
+    year: -1200, endYear: -1150,
+    dateCertainty: "firm", category: "world-event", testament: "OT",
+    description: "Within a few decades the Hittites, Mycenaean Greeks, and many Egyptian, Syrian, and Cypriot centers collapsed. Sea Peoples, drought, and systemic fragility implicated. Frames the world Israel entered in the Conquest and Judges era.",
+    tags: ["world-history", "sea-peoples"]
+  },
+  {
+    id: "trojan-war", name: "Trojan War (traditional)",
+    year: -1194, endYear: -1184,
+    dateCertainty: "approximate", category: "world-event", testament: "OT",
+    description: "Mycenaean coalition besieges Troy. Source of Homer's Iliad. Roughly contemporary with Israel's early Judges era.",
+    tags: ["greece", "world-history"]
+  },
+  {
+    id: "phoenicia-peak", name: "Phoenician maritime peak",
+    year: -1200, endYear: -800,
+    dateCertainty: "firm", category: "world-empire", testament: "OT",
+    description: "Tyre, Sidon, and Byblos dominated Mediterranean trade and spread the alphabet. Hiram of Tyre supplied cedar for Solomon's Temple; Jezebel was a Sidonian princess.",
+    tags: ["phoenicia", "world-history"]
+  },
+  {
+    id: "founding-rome", name: "Traditional founding of Rome",
+    year: -753, endYear: null,
+    dateCertainty: "approximate", category: "world-event", testament: "OT",
+    description: "Romulus founds Rome (legend). Beginning of the Roman Kingdom; matches roughly with the reigns of Uzziah and Jeroboam II.",
+    tags: ["rome", "world-history"]
+  },
+  {
+    id: "neo-assyrian", name: "Neo-Assyrian Empire",
+    year: -911, endYear: -609,
+    dateCertainty: "firm", category: "world-empire", testament: "OT",
+    description: "First true world empire — at its height stretched from Egypt to Iran. Conquered the Northern Kingdom (722) and besieged Hezekiah (701). Fell to a Median-Babylonian coalition; Nineveh sacked in 612 BC.",
+    tags: ["assyria", "world-history"]
+  },
+  {
+    id: "fall-nineveh", name: "Fall of Nineveh",
+    year: -612, endYear: null,
+    dateCertainty: "firm", category: "world-event", testament: "OT",
+    description: "Median-Babylonian coalition sacks the Assyrian capital. Fulfilled the prophecies of Nahum and Zephaniah.",
+    tags: ["assyria", "world-history"]
+  },
+  {
+    id: "neo-babylonian", name: "Neo-Babylonian Empire",
+    year: -626, endYear: -539,
+    dateCertainty: "firm", category: "world-empire", testament: "OT",
+    description: "Founded by Nabopolassar; reached its peak under Nebuchadnezzar II. Destroyed Jerusalem and the First Temple in 586 BC. Fell to Cyrus the Persian in 539 BC.",
+    tags: ["babylon", "world-history"]
+  },
+  {
+    id: "achaemenid", name: "Achaemenid Persian Empire",
+    year: -550, endYear: -330,
+    dateCertainty: "firm", category: "world-empire", testament: "OT",
+    description: "Founded by Cyrus the Great. Largest empire of the ancient world up to that point. Allowed Jewish return and temple rebuilding. Fell to Alexander the Great.",
+    tags: ["persia", "world-history"]
+  },
+  {
+    id: "buddha", name: "Life of the Buddha (traditional)",
+    year: -563, endYear: -483,
+    dateCertainty: "approximate", category: "world-event", testament: "OT",
+    description: "Siddhārtha Gautama lives in northern India. Roughly contemporary with the Babylonian Exile.",
+    tags: ["world-history"]
+  },
+  {
+    id: "confucius", name: "Confucius",
+    year: -551, endYear: -479,
+    dateCertainty: "firm", category: "world-event", testament: "OT",
+    description: "Chinese philosopher whose lifetime overlaps the Babylonian exile and post-exilic returns under Cyrus and Darius.",
+    tags: ["world-history"]
+  },
+  {
+    id: "salamis", name: "Battle of Salamis",
+    year: -480, endYear: null,
+    dateCertainty: "firm", category: "world-event", testament: "OT",
+    description: "Greek navy defeats Xerxes' Persian fleet, halting Persian expansion into Europe. Same Xerxes who appears in Esther.",
+    tags: ["persia", "greece", "world-history"]
+  },
+  {
+    id: "classical-greece", name: "Classical Greece",
+    year: -480, endYear: -323,
+    dateCertainty: "firm", category: "world-empire", testament: "OT",
+    description: "Athenian democracy, Socrates, Plato, Aristotle. Sparta-Athens rivalry. Coincides with the post-exilic period and Malachi.",
+    tags: ["greece", "world-history"]
+  },
+  {
+    id: "alexander-conquest", name: "Conquests of Alexander the Great",
+    year: -334, endYear: -323,
+    dateCertainty: "firm", category: "world-event", testament: "OT",
+    description: "In a decade Alexander overthrows the Persian Empire and reaches India. Hellenizes the Near East; Greek becomes the lingua franca that would carry the New Testament.",
+    tags: ["greece", "world-history", "hellenistic"]
+  },
+  {
+    id: "ptolemaic-kingdom", name: "Ptolemaic Kingdom (Egypt)",
+    year: -305, endYear: -30,
+    dateCertainty: "firm", category: "world-empire", testament: "OT",
+    description: "Greek dynasty in Egypt founded by Ptolemy I. Ruled Judea ~301-200 BC. Sponsored the Septuagint translation of the Hebrew Bible. Ended with Cleopatra VII.",
+    tags: ["egypt", "hellenistic", "septuagint", "world-history"]
+  },
+  {
+    id: "seleucid-empire", name: "Seleucid Empire",
+    year: -312, endYear: -63,
+    dateCertainty: "firm", category: "world-empire", testament: "OT",
+    description: "Hellenistic empire in Syria/Mesopotamia. Took Judea from the Ptolemies in 200 BC. Antiochus IV Epiphanes desecrated the Temple in 167 BC, sparking the Maccabean Revolt.",
+    tags: ["hellenistic", "world-history"]
+  },
+  {
+    id: "septuagint", name: "Septuagint (LXX) translation begins",
+    year: -250, endYear: -130,
+    dateCertainty: "approximate", category: "world-event", testament: "OT",
+    description: "The Hebrew Bible is translated into Greek for the Jewish community in Alexandria. Becomes the Bible most often quoted in the New Testament.",
+    tags: ["septuagint", "alexandria", "world-history"]
+  },
+  {
+    id: "maccabean-revolt", name: "Maccabean Revolt",
+    year: -167, endYear: -160,
+    dateCertainty: "firm", category: "world-event", testament: "OT",
+    description: "Judah Maccabee and his brothers revolt against Antiochus IV's persecution. Rededication of the Temple in 164 BC commemorated as Hanukkah.",
+    tags: ["hellenistic", "hanukkah", "world-history"]
+  },
+  {
+    id: "hasmonean", name: "Hasmonean dynasty",
+    year: -140, endYear: -37,
+    dateCertainty: "firm", category: "world-empire", testament: "OT",
+    description: "Independent Jewish kingdom in Judea. Combined high priesthood with kingship. Ended when Herod the Great took the throne in 37 BC.",
+    tags: ["hasmonean", "world-history"]
+  },
+  {
+    id: "roman-republic", name: "Roman Republic",
+    year: -509, endYear: -27,
+    dateCertainty: "firm", category: "world-empire", testament: "OT",
+    description: "Roman state from the expulsion of the Tarquins until Augustus. Conquered the Mediterranean; annexed Judea in 63 BC under Pompey.",
+    tags: ["rome", "world-history"]
+  },
+  {
+    id: "rome-takes-judea", name: "Rome annexes Judea",
+    year: -63, endYear: null,
+    dateCertainty: "firm", category: "world-event", testament: "OT",
+    description: "Pompey enters Jerusalem; Judea becomes a Roman client state. Sets the political stage for the New Testament.",
+    tags: ["rome", "world-history"]
+  },
+  {
+    id: "julius-caesar-died", name: "Assassination of Julius Caesar",
+    year: -44, endYear: null,
+    dateCertainty: "firm", category: "world-event", testament: "OT",
+    description: "Caesar killed on the Ides of March. Triggers civil wars that end the Republic.",
+    tags: ["rome", "world-history"]
+  },
+  {
+    id: "roman-empire", name: "Roman Empire",
+    year: -27, endYear: 476,
+    dateCertainty: "firm", category: "world-empire", testament: "NT",
+    description: "Augustus becomes first emperor. The Pax Romana provides the political and infrastructural backdrop for the entire New Testament.",
+    tags: ["rome", "world-history"]
+  },
+  {
+    id: "vesuvius", name: "Eruption of Mount Vesuvius",
+    year: 79, endYear: null,
+    dateCertainty: "firm", category: "world-event", testament: "NT",
+    description: "Pompeii and Herculaneum destroyed. A few years before John writes Revelation.",
+    tags: ["rome", "world-history"]
+  }
+);
+
+// =============================================================
+// WORLD HISTORY — non-biblical rulers
+// =============================================================
+BibleTimeline.people.push(
+  {
+    id: "sargon-akkad", name: "Sargon of Akkad",
+    birthYear: -2334, deathYear: -2279, textualAge: null,
+    dateCertainty: "approximate", era: "patriarchal", category: "foreign-king", testament: "OT",
+    book: "—", references: ["Sumerian King List"],
+    reignStart: -2334, reignEnd: -2279,
+    description: "Founder of the world's first true empire, the Akkadian Empire. Conquered Sumer and parts of Elam and the Levant. Roughly contemporary with the late life of Noah and the early Genesis 11 patriarchs.",
+    tags: ["mesopotamia", "world-history", "foreign-ruler"]
+  },
+  {
+    id: "hammurabi", name: "Hammurabi of Babylon",
+    birthYear: -1810, deathYear: -1750, textualAge: null,
+    dateCertainty: "firm", era: "patriarchal", category: "foreign-king", testament: "OT",
+    book: "—", references: ["Code of Hammurabi"],
+    reignStart: -1792, reignEnd: -1750,
+    description: "Sixth king of the First Babylonian dynasty. Author of one of the earliest legal codes; rough contemporary of Abraham. Expanded Babylon to dominate Mesopotamia.",
+    tags: ["babylon", "world-history", "foreign-ruler", "law-code"]
+  },
+  {
+    id: "hatshepsut", name: "Hatshepsut",
+    birthYear: -1507, deathYear: -1458, textualAge: null,
+    dateCertainty: "firm", era: "exodus", category: "foreign-king", testament: "OT",
+    book: "—",
+    reignStart: -1479, reignEnd: -1458,
+    description: "Female pharaoh of the 18th dynasty. Some early-date Exodus advocates suggest she was the princess who rescued the infant Moses; chronologically possible but not directly attested.",
+    tags: ["egypt", "world-history", "foreign-ruler"]
+  },
+  {
+    id: "thutmose-iii", name: "Thutmose III",
+    birthYear: -1481, deathYear: -1425, textualAge: null,
+    dateCertainty: "firm", era: "exodus", category: "foreign-king", testament: "OT",
+    book: "—",
+    reignStart: -1479, reignEnd: -1425,
+    description: "Greatest military pharaoh of Egypt's New Kingdom. Some early-date Exodus advocates name him as the Pharaoh of the Oppression.",
+    tags: ["egypt", "world-history", "foreign-ruler"]
+  },
+  {
+    id: "akhenaten", name: "Akhenaten",
+    birthYear: -1380, deathYear: -1334, textualAge: null,
+    dateCertainty: "firm", era: "exodus", category: "foreign-king", testament: "OT",
+    book: "—",
+    reignStart: -1353, reignEnd: -1336,
+    description: "Pharaoh who attempted Egypt's first major monotheistic reform — sole worship of the Aten (sun-disk). Built the new capital Amarna. Sometimes compared to Mosaic monotheism, though the relationship is debated.",
+    tags: ["egypt", "world-history", "foreign-ruler", "monotheism"]
+  },
+  {
+    id: "tutankhamun", name: "Tutankhamun",
+    birthYear: -1341, deathYear: -1323, textualAge: 18,
+    dateCertainty: "firm", era: "exodus", category: "foreign-king", testament: "OT",
+    book: "—",
+    reignStart: -1332, reignEnd: -1323,
+    description: "Boy pharaoh who reversed his father Akhenaten's monotheistic reform. Famous for his intact tomb, discovered in 1922.",
+    tags: ["egypt", "world-history", "foreign-ruler"]
+  },
+  {
+    id: "ramses-ii", name: "Ramses II ('the Great')",
+    birthYear: -1303, deathYear: -1213, textualAge: 90,
+    dateCertainty: "firm", era: "exodus", category: "foreign-king", testament: "OT",
+    book: "—",
+    reignStart: -1279, reignEnd: -1213,
+    description: "Long-reigning pharaoh of the 19th dynasty; built Pi-Ramesses, fought the Hittites at Kadesh. The most common candidate for the Pharaoh of the Exodus on the late-date chronology.",
+    tags: ["egypt", "world-history", "foreign-ruler", "exodus-pharaoh"]
+  },
+  {
+    id: "merneptah", name: "Merneptah",
+    birthYear: -1273, deathYear: -1203, textualAge: null,
+    dateCertainty: "firm", era: "conquest", category: "foreign-king", testament: "OT",
+    book: "—",
+    reignStart: -1213, reignEnd: -1203,
+    description: "Son of Ramses II. His victory stele (1208 BC) contains the earliest extra-biblical reference to 'Israel' — already in Canaan as a people.",
+    tags: ["egypt", "world-history", "foreign-ruler", "merneptah-stele"]
+  },
+  {
+    id: "shalmaneser-iii", name: "Shalmaneser III",
+    birthYear: -890, deathYear: -824, textualAge: null,
+    dateCertainty: "firm", era: "divided-monarchy", category: "foreign-king", testament: "OT",
+    book: "—", references: ["Black Obelisk", "Kurkh Monolith"],
+    reignStart: -859, reignEnd: -824,
+    description: "Neo-Assyrian king. His inscriptions name Ahab of Israel at Qarqar (853 BC) and depict Jehu of Israel paying tribute on the Black Obelisk — two of the earliest extra-biblical references to Israelite kings.",
+    tags: ["assyria", "world-history", "foreign-ruler"]
+  },
+  {
+    id: "tiglath-pileser-iii", name: "Tiglath-Pileser III ('Pul')",
+    birthYear: -795, deathYear: -727, textualAge: null,
+    dateCertainty: "firm", era: "divided-monarchy", category: "foreign-king", testament: "OT",
+    book: "2 Kings", references: ["2 Kings 15-16", "1 Chronicles 5:26"],
+    reignStart: -745, reignEnd: -727,
+    description: "Founder of the Neo-Assyrian Empire's imperial phase. Took tribute from Menahem and deported Galilee; intervened on Ahaz's behalf during the Syro-Ephraimite war.",
+    tags: ["assyria", "world-history", "foreign-ruler"]
+  },
+  {
+    id: "sargon-ii", name: "Sargon II",
+    birthYear: -770, deathYear: -705, textualAge: null,
+    dateCertainty: "firm", era: "divided-monarchy", category: "foreign-king", testament: "OT",
+    book: "Isaiah", references: ["Isaiah 20:1"],
+    reignStart: -722, reignEnd: -705,
+    description: "Completed the conquest of Samaria in 722 BC and deported the Northern Kingdom. Founded Khorsabad. Mentioned by name in Isaiah 20.",
+    tags: ["assyria", "world-history", "foreign-ruler", "fall-of-samaria"]
+  },
+  {
+    id: "sennacherib", name: "Sennacherib",
+    birthYear: -740, deathYear: -681, textualAge: null,
+    dateCertainty: "firm", era: "divided-monarchy", category: "foreign-king", testament: "OT",
+    book: "2 Kings", references: ["2 Kings 18-19", "Isaiah 36-37", "Sennacherib's Prism"],
+    reignStart: -705, reignEnd: -681,
+    description: "Assyrian king who invaded Judah and besieged Jerusalem in 701 BC during Hezekiah's reign. His own annals describe shutting Hezekiah up 'like a bird in a cage'. Assassinated by his sons.",
+    tags: ["assyria", "world-history", "foreign-ruler", "assyrian-crisis"]
+  },
+  {
+    id: "esarhaddon", name: "Esarhaddon",
+    birthYear: -713, deathYear: -669, textualAge: null,
+    dateCertainty: "firm", era: "divided-monarchy", category: "foreign-king", testament: "OT",
+    book: "—", references: ["2 Kings 19:37", "Ezra 4:2"],
+    reignStart: -681, reignEnd: -669,
+    description: "Son of Sennacherib. Conquered Egypt; resettled foreigners in Samaria.",
+    tags: ["assyria", "world-history", "foreign-ruler"]
+  },
+  {
+    id: "ashurbanipal", name: "Ashurbanipal",
+    birthYear: -685, deathYear: -627, textualAge: null,
+    dateCertainty: "firm", era: "divided-monarchy", category: "foreign-king", testament: "OT",
+    book: "—", references: ["Ezra 4:10 (Asnapper)"],
+    reignStart: -668, reignEnd: -627,
+    description: "Last great Neo-Assyrian king. Built the famous library at Nineveh from which the Epic of Gilgamesh was recovered.",
+    tags: ["assyria", "world-history", "foreign-ruler"]
+  },
+  {
+    id: "nabopolassar", name: "Nabopolassar",
+    birthYear: -658, deathYear: -605, textualAge: null,
+    dateCertainty: "firm", era: "divided-monarchy", category: "foreign-king", testament: "OT",
+    book: "—",
+    reignStart: -626, reignEnd: -605,
+    description: "Founder of the Neo-Babylonian Empire. With the Medes, sacked Nineveh in 612 BC.",
+    tags: ["babylon", "world-history", "foreign-ruler"]
+  },
+  {
+    id: "neco-ii", name: "Pharaoh Necho II",
+    birthYear: -640, deathYear: -595, textualAge: null,
+    dateCertainty: "firm", era: "divided-monarchy", category: "foreign-king", testament: "OT",
+    book: "2 Kings", references: ["2 Kings 23:29-35", "Jeremiah 46"],
+    reignStart: -610, reignEnd: -595,
+    description: "26th-dynasty pharaoh. Killed Josiah at Megiddo (609 BC) and was defeated by Nebuchadnezzar at Carchemish (605 BC).",
+    tags: ["egypt", "world-history", "foreign-ruler"]
+  },
+  {
+    id: "alexander-great", name: "Alexander the Great",
+    birthYear: -356, deathYear: -323, textualAge: 32,
+    dateCertainty: "firm", era: "post-exile", category: "foreign-king", testament: "OT",
+    book: "Daniel", references: ["Daniel 8 (typological)"],
+    reignStart: -336, reignEnd: -323,
+    description: "Macedonian king who in twelve years conquered the Persian Empire from the Aegean to the Indus. His campaigns brought Greek language and culture to the Near East. Daniel 8's 'goat from the west' is widely read as referring to him.",
+    tags: ["greece", "world-history", "foreign-ruler", "hellenistic"]
+  },
+  {
+    id: "ptolemy-i", name: "Ptolemy I Soter",
+    birthYear: -367, deathYear: -283, textualAge: null,
+    dateCertainty: "firm", era: "post-exile", category: "foreign-king", testament: "OT",
+    book: "—",
+    reignStart: -305, reignEnd: -283,
+    description: "Macedonian general; founder of the Ptolemaic dynasty in Egypt. His descendants ruled Judea for a century and sponsored the Septuagint.",
+    tags: ["hellenistic", "egypt", "world-history", "foreign-ruler"]
+  },
+  {
+    id: "antiochus-iv", name: "Antiochus IV Epiphanes",
+    birthYear: -215, deathYear: -164, textualAge: null,
+    dateCertainty: "firm", era: "second-temple", category: "foreign-king", testament: "OT",
+    book: "Daniel", references: ["Daniel 8", "Daniel 11", "1 Maccabees"],
+    reignStart: -175, reignEnd: -164,
+    description: "Seleucid king who outlawed Judaism and desecrated the Jerusalem Temple in 167 BC ('the abomination of desolation' — Daniel 11), sparking the Maccabean revolt.",
+    tags: ["hellenistic", "world-history", "foreign-ruler", "maccabean"]
+  },
+  {
+    id: "judas-maccabee", name: "Judah Maccabee",
+    birthYear: -190, deathYear: -160, textualAge: null,
+    dateCertainty: "firm", era: "second-temple", category: "other", testament: "OT",
+    book: "—", references: ["1 Maccabees", "2 Maccabees"],
+    description: "Third son of Mattathias; led the Jewish revolt against Antiochus IV. Cleansed and rededicated the Temple in 164 BC — the origin of Hanukkah.",
+    tags: ["maccabean", "world-history", "hanukkah"]
+  },
+  {
+    id: "pompey-magnus", name: "Pompey the Great",
+    birthYear: -106, deathYear: -48, textualAge: null,
+    dateCertainty: "firm", era: "second-temple", category: "foreign-king", testament: "OT",
+    book: "—",
+    description: "Roman general who annexed Judea in 63 BC, ending Hasmonean independence. Famously entered the Holy of Holies but did not loot the Temple.",
+    tags: ["rome", "world-history", "foreign-ruler"]
+  },
+  {
+    id: "julius-caesar", name: "Julius Caesar",
+    birthYear: -100, deathYear: -44, textualAge: 55,
+    dateCertainty: "firm", era: "second-temple", category: "foreign-king", testament: "OT",
+    book: "—",
+    description: "Roman general and dictator whose assassination in 44 BC triggered the wars that ended the Republic and led to Augustus's empire.",
+    tags: ["rome", "world-history", "foreign-ruler"]
+  },
+  {
+    id: "cleopatra-vii", name: "Cleopatra VII",
+    birthYear: -69, deathYear: -30, textualAge: 39,
+    dateCertainty: "firm", era: "second-temple", category: "queen", testament: "OT",
+    book: "—",
+    reignStart: -51, reignEnd: -30,
+    description: "Last pharaoh of the Ptolemaic dynasty. Allied with Julius Caesar and Mark Antony; her death ended Hellenistic Egypt and brought it into the Roman Empire.",
+    tags: ["egypt", "rome", "world-history", "foreign-ruler"]
+  },
+  {
+    id: "herod-agrippa-i", name: "Herod Agrippa I",
+    birthYear: -10, deathYear: 44, textualAge: 54,
+    dateCertainty: "firm", era: "early-church", category: "foreign-king", testament: "NT",
+    book: "Acts", references: ["Acts 12"],
+    reignStart: 41, reignEnd: 44,
+    description: "Grandson of Herod the Great. Beheaded James son of Zebedee and imprisoned Peter. Died suddenly in Caesarea (Acts 12:23) — corroborated by Josephus.",
+    tags: ["herodian", "rome", "world-history"]
+  },
+  {
+    id: "claudius", name: "Claudius",
+    birthYear: -10, deathYear: 54, textualAge: 63,
+    dateCertainty: "firm", era: "early-church", category: "foreign-king", testament: "NT",
+    book: "Acts", references: ["Acts 11:28", "Acts 18:2"],
+    reignStart: 41, reignEnd: 54,
+    description: "Fourth Roman emperor. His expulsion of Jews from Rome (~AD 49) brought Aquila and Priscilla to Corinth.",
+    tags: ["rome", "world-history", "foreign-ruler"]
+  }
+);
+
+
+
+// =============================================================
+// BOOKS OF THE BIBLE
+//   coversFrom/coversTo : the historical period the book describes
+//   writtenFrom/writtenTo : approximate composition date (when known).
+//     Where authorship and date are debated, this uses a moderate
+//     mainstream view; alternatives are noted in description.
+// =============================================================
+BibleTimeline.books = [
+  // ── Torah / Pentateuch ───────────────────────────────────────
+  { id: "book-genesis", name: "Genesis", order: 1, testament: "OT", section: "torah",
+    coversFrom: -4000, coversTo: -1640, writtenFrom: -1450, writtenTo: -1400,
+    author: "Moses (traditional); composed in stages and finalized post-exile (mainstream academic).",
+    description: "Origins of the world, of humanity, and of Israel through Abraham, Isaac, Jacob and Joseph.",
+    chapters: 50 },
+  { id: "book-exodus", name: "Exodus", order: 2, testament: "OT", section: "torah",
+    coversFrom: -1300, coversTo: -1230, writtenFrom: -1450, writtenTo: -1400,
+    author: "Moses (traditional)",
+    description: "Israel's escape from Egypt, the giving of the Torah at Sinai, and the building of the tabernacle.",
+    chapters: 40 },
+  { id: "book-leviticus", name: "Leviticus", order: 3, testament: "OT", section: "torah",
+    coversFrom: -1250, coversTo: -1249, writtenFrom: -1450, writtenTo: -1400,
+    author: "Moses (traditional)",
+    description: "Sacrificial system, priestly regulations, and holiness code given at Sinai.",
+    chapters: 27 },
+  { id: "book-numbers", name: "Numbers", order: 4, testament: "OT", section: "torah",
+    coversFrom: -1250, coversTo: -1210, writtenFrom: -1450, writtenTo: -1400,
+    author: "Moses (traditional)",
+    description: "Forty years of wilderness wandering between Sinai and the plains of Moab.",
+    chapters: 36 },
+  { id: "book-deuteronomy", name: "Deuteronomy", order: 5, testament: "OT", section: "torah",
+    coversFrom: -1210, coversTo: -1210, writtenFrom: -1410, writtenTo: -1210,
+    author: "Moses (traditional); core may have been the 'Book of the Law' found under Josiah.",
+    description: "Moses' final speeches in Moab, restating the covenant before Israel enters Canaan.",
+    chapters: 34 },
+
+  // ── Historical books ────────────────────────────────────────
+  { id: "book-joshua", name: "Joshua", order: 6, testament: "OT", section: "history",
+    coversFrom: -1210, coversTo: -1180, writtenFrom: -1180, writtenTo: -1050,
+    author: "Anonymous; Joshua and others (traditional).",
+    description: "Conquest and division of Canaan under Joshua.",
+    chapters: 24 },
+  { id: "book-judges", name: "Judges", order: 7, testament: "OT", section: "history",
+    coversFrom: -1200, coversTo: -1050, writtenFrom: -1050, writtenTo: -950,
+    author: "Anonymous (Samuel, traditionally).",
+    description: "Cycle of apostasy and deliverance through twelve judges.",
+    chapters: 21 },
+  { id: "book-ruth", name: "Ruth", order: 8, testament: "OT", section: "history",
+    coversFrom: -1130, coversTo: -1100, writtenFrom: -1000, writtenTo: -500,
+    author: "Anonymous.",
+    description: "A Moabite widow becomes the great-grandmother of David.",
+    chapters: 4 },
+  { id: "book-1samuel", name: "1 Samuel", order: 9, testament: "OT", section: "history",
+    coversFrom: -1100, coversTo: -1010, writtenFrom: -930, writtenTo: -550,
+    author: "Anonymous.",
+    description: "Birth of Samuel, anointing of Saul, rise of David.",
+    chapters: 31 },
+  { id: "book-2samuel", name: "2 Samuel", order: 10, testament: "OT", section: "history",
+    coversFrom: -1010, coversTo: -970, writtenFrom: -930, writtenTo: -550,
+    author: "Anonymous.",
+    description: "David's reign — triumphs, sins, and the Davidic covenant.",
+    chapters: 24 },
+  { id: "book-1kings", name: "1 Kings", order: 11, testament: "OT", section: "history",
+    coversFrom: -970, coversTo: -852, writtenFrom: -560, writtenTo: -540,
+    author: "Anonymous (Jeremiah, traditionally).",
+    description: "Solomon's reign, the temple, the kingdom split, Elijah and Ahab.",
+    chapters: 22 },
+  { id: "book-2kings", name: "2 Kings", order: 12, testament: "OT", section: "history",
+    coversFrom: -852, coversTo: -560, writtenFrom: -560, writtenTo: -540,
+    author: "Anonymous (Jeremiah, traditionally).",
+    description: "Elisha through the fall of Samaria and Jerusalem.",
+    chapters: 25 },
+  { id: "book-1chronicles", name: "1 Chronicles", order: 13, testament: "OT", section: "history",
+    coversFrom: -4000, coversTo: -970, writtenFrom: -450, writtenTo: -400,
+    author: "Anonymous (Ezra, traditionally).",
+    description: "Genealogies from Adam through David's reign, retold for the post-exilic community.",
+    chapters: 29 },
+  { id: "book-2chronicles", name: "2 Chronicles", order: 14, testament: "OT", section: "history",
+    coversFrom: -970, coversTo: -538, writtenFrom: -450, writtenTo: -400,
+    author: "Anonymous (Ezra, traditionally).",
+    description: "Solomon, the kings of Judah, the exile, and the decree of Cyrus.",
+    chapters: 36 },
+  { id: "book-ezra", name: "Ezra", order: 15, testament: "OT", section: "history",
+    coversFrom: -538, coversTo: -440, writtenFrom: -440, writtenTo: -400,
+    author: "Ezra (traditional).",
+    description: "Two waves of return from exile and the rebuilding of the Temple.",
+    chapters: 10 },
+  { id: "book-nehemiah", name: "Nehemiah", order: 16, testament: "OT", section: "history",
+    coversFrom: -445, coversTo: -430, writtenFrom: -430, writtenTo: -400,
+    author: "Nehemiah (traditional).",
+    description: "Rebuilding of Jerusalem's walls and post-exilic reform.",
+    chapters: 13 },
+  { id: "book-esther", name: "Esther", order: 17, testament: "OT", section: "history",
+    coversFrom: -483, coversTo: -473, writtenFrom: -460, writtenTo: -350,
+    author: "Anonymous.",
+    description: "A Jewish queen of Persia saves her people from genocide. Origin of Purim.",
+    chapters: 10 },
+
+  // ── Wisdom / poetry ─────────────────────────────────────────
+  { id: "book-job", name: "Job", order: 18, testament: "OT", section: "wisdom",
+    coversFrom: -2000, coversTo: -1800, writtenFrom: -950, writtenTo: -500,
+    author: "Anonymous.",
+    description: "A righteous patriarch's suffering and dialogue with friends and God.",
+    chapters: 42 },
+  { id: "book-psalms", name: "Psalms", order: 19, testament: "OT", section: "wisdom",
+    coversFrom: -1010, coversTo: -440, writtenFrom: -1010, writtenTo: -440,
+    author: "David (many), Asaph, sons of Korah, Solomon, Moses, others.",
+    description: "150 prayers and songs, composed across many centuries and edited into a five-book collection.",
+    chapters: 150 },
+  { id: "book-proverbs", name: "Proverbs", order: 20, testament: "OT", section: "wisdom",
+    coversFrom: -970, coversTo: -700, writtenFrom: -970, writtenTo: -700,
+    author: "Solomon (chiefly), Agur, Lemuel; collected by Hezekiah's men.",
+    description: "Practical wisdom for living rightly under God.",
+    chapters: 31 },
+  { id: "book-ecclesiastes", name: "Ecclesiastes", order: 21, testament: "OT", section: "wisdom",
+    coversFrom: -935, coversTo: -935, writtenFrom: -935, writtenTo: -935,
+    author: "Solomon (traditional); Qoheleth.",
+    description: "A meditation on life's vanity and the right use of finite days under God.",
+    chapters: 12 },
+  { id: "book-song", name: "Song of Songs", order: 22, testament: "OT", section: "wisdom",
+    coversFrom: -965, coversTo: -965, writtenFrom: -965, writtenTo: -965,
+    author: "Solomon (traditional).",
+    description: "A lyrical celebration of marital love.",
+    chapters: 8 },
+
+  // ── Major prophets ──────────────────────────────────────────
+  { id: "book-isaiah", name: "Isaiah", order: 23, testament: "OT", section: "major-prophets",
+    coversFrom: -740, coversTo: -686, writtenFrom: -740, writtenTo: -686,
+    author: "Isaiah son of Amoz (traditional). Mainstream scholarship sees chs 40-66 as later.",
+    description: "Prophecies of judgment and hope, including the Suffering Servant.",
+    chapters: 66 },
+  { id: "book-jeremiah", name: "Jeremiah", order: 24, testament: "OT", section: "major-prophets",
+    coversFrom: -627, coversTo: -580, writtenFrom: -627, writtenTo: -580,
+    author: "Jeremiah, with Baruch as scribe.",
+    description: "The 'weeping prophet' through the fall of Jerusalem; promise of a New Covenant.",
+    chapters: 52 },
+  { id: "book-lamentations", name: "Lamentations", order: 25, testament: "OT", section: "major-prophets",
+    coversFrom: -586, coversTo: -585, writtenFrom: -586, writtenTo: -580,
+    author: "Jeremiah (traditional).",
+    description: "Five poetic laments over the destruction of Jerusalem.",
+    chapters: 5 },
+  { id: "book-ezekiel", name: "Ezekiel", order: 26, testament: "OT", section: "major-prophets",
+    coversFrom: -593, coversTo: -571, writtenFrom: -593, writtenTo: -571,
+    author: "Ezekiel.",
+    description: "Visionary prophecies to the Babylonian exiles — God's chariot-throne, dry bones, and a future temple.",
+    chapters: 48 },
+  { id: "book-daniel", name: "Daniel", order: 27, testament: "OT", section: "major-prophets",
+    coversFrom: -605, coversTo: -535, writtenFrom: -540, writtenTo: -160,
+    author: "Daniel (traditional, 6th C BC); some scholars argue for a 2nd-century BC compilation.",
+    description: "Court narratives in Babylon and Persia, plus apocalyptic visions of four kingdoms and the Son of Man.",
+    chapters: 12 },
+
+  // ── Minor prophets ──────────────────────────────────────────
+  { id: "book-hosea", name: "Hosea", order: 28, testament: "OT", section: "minor-prophets",
+    coversFrom: -753, coversTo: -722, writtenFrom: -753, writtenTo: -722,
+    author: "Hosea.",
+    description: "Israel's idolatry as marital unfaithfulness to YHWH.",
+    chapters: 14 },
+  { id: "book-joel", name: "Joel", order: 29, testament: "OT", section: "minor-prophets",
+    coversFrom: -835, coversTo: -400, writtenFrom: -835, writtenTo: -400,
+    author: "Joel son of Pethuel.",
+    description: "A locust plague becomes the lens for the Day of the LORD; quoted at Pentecost.",
+    chapters: 3 },
+  { id: "book-amos", name: "Amos", order: 30, testament: "OT", section: "minor-prophets",
+    coversFrom: -760, coversTo: -750, writtenFrom: -760, writtenTo: -750,
+    author: "Amos of Tekoa.",
+    description: "Denounces social injustice in the wealthy Northern Kingdom under Jeroboam II.",
+    chapters: 9 },
+  { id: "book-obadiah", name: "Obadiah", order: 31, testament: "OT", section: "minor-prophets",
+    coversFrom: -586, coversTo: -550, writtenFrom: -586, writtenTo: -550,
+    author: "Obadiah.",
+    description: "Shortest OT book — judgment on Edom for complicity in Jerusalem's distress.",
+    chapters: 1 },
+  { id: "book-jonah", name: "Jonah", order: 32, testament: "OT", section: "minor-prophets",
+    coversFrom: -785, coversTo: -750, writtenFrom: -750, writtenTo: -400,
+    author: "Anonymous (traditionally Jonah).",
+    description: "A reluctant prophet, a great fish, and the repentance of Nineveh.",
+    chapters: 4 },
+  { id: "book-micah", name: "Micah", order: 33, testament: "OT", section: "minor-prophets",
+    coversFrom: -740, coversTo: -686, writtenFrom: -740, writtenTo: -686,
+    author: "Micah of Moresheth.",
+    description: "Judgment on Samaria and Jerusalem; the messianic prophecy of Bethlehem.",
+    chapters: 7 },
+  { id: "book-nahum", name: "Nahum", order: 34, testament: "OT", section: "minor-prophets",
+    coversFrom: -660, coversTo: -612, writtenFrom: -660, writtenTo: -612,
+    author: "Nahum the Elkoshite.",
+    description: "Vivid oracle of judgment against Nineveh shortly before its fall.",
+    chapters: 3 },
+  { id: "book-habakkuk", name: "Habakkuk", order: 35, testament: "OT", section: "minor-prophets",
+    coversFrom: -612, coversTo: -598, writtenFrom: -612, writtenTo: -598,
+    author: "Habakkuk.",
+    description: "A dialogue with God on why he uses the wicked Babylonians. 'The righteous shall live by faith.'",
+    chapters: 3 },
+  { id: "book-zephaniah", name: "Zephaniah", order: 36, testament: "OT", section: "minor-prophets",
+    coversFrom: -640, coversTo: -609, writtenFrom: -640, writtenTo: -609,
+    author: "Zephaniah, descendant of Hezekiah.",
+    description: "Day of the LORD against Judah and the nations during Josiah's reign.",
+    chapters: 3 },
+  { id: "book-haggai", name: "Haggai", order: 37, testament: "OT", section: "minor-prophets",
+    coversFrom: -520, coversTo: -520, writtenFrom: -520, writtenTo: -520,
+    author: "Haggai.",
+    description: "Four short oracles in 520 BC urging the returnees to finish the Temple.",
+    chapters: 2 },
+  { id: "book-zechariah", name: "Zechariah", order: 38, testament: "OT", section: "minor-prophets",
+    coversFrom: -520, coversTo: -480, writtenFrom: -520, writtenTo: -480,
+    author: "Zechariah son of Berechiah.",
+    description: "Visions of the rebuilt Temple and the Branch; heavily quoted in the Passion.",
+    chapters: 14 },
+  { id: "book-malachi", name: "Malachi", order: 39, testament: "OT", section: "minor-prophets",
+    coversFrom: -440, coversTo: -430, writtenFrom: -440, writtenTo: -430,
+    author: "Malachi.",
+    description: "Final OT prophet — confronts priestly corruption; promises the coming of Elijah.",
+    chapters: 4 },
+
+  // ── Gospels ────────────────────────────────────────────────
+  { id: "book-matthew", name: "Matthew", order: 40, testament: "NT", section: "gospels",
+    coversFrom: -5, coversTo: 30, writtenFrom: 50, writtenTo: 70,
+    author: "Matthew the apostle (traditional).",
+    description: "Jesus as the promised Messiah of Israel; the Sermon on the Mount.",
+    chapters: 28 },
+  { id: "book-mark", name: "Mark", order: 41, testament: "NT", section: "gospels",
+    coversFrom: 27, coversTo: 30, writtenFrom: 55, writtenTo: 70,
+    author: "John Mark, on the testimony of Peter (traditional).",
+    description: "The shortest, fastest-paced gospel — Jesus as servant and Son of God.",
+    chapters: 16 },
+  { id: "book-luke", name: "Luke", order: 42, testament: "NT", section: "gospels",
+    coversFrom: -5, coversTo: 30, writtenFrom: 60, writtenTo: 80,
+    author: "Luke, Paul's companion.",
+    description: "An orderly account written for Theophilus; emphasis on outsiders, women, the poor.",
+    chapters: 24 },
+  { id: "book-john", name: "John", order: 43, testament: "NT", section: "gospels",
+    coversFrom: 27, coversTo: 30, writtenFrom: 85, writtenTo: 95,
+    author: "John the apostle (traditional).",
+    description: "Theological reflection on Jesus as the eternal Word and 'I AM'.",
+    chapters: 21 },
+
+  // ── History (NT) ───────────────────────────────────────────
+  { id: "book-acts", name: "Acts", order: 44, testament: "NT", section: "history-nt",
+    coversFrom: 30, coversTo: 62, writtenFrom: 62, writtenTo: 80,
+    author: "Luke.",
+    description: "From Pentecost to Paul under house arrest in Rome — the gospel from Jerusalem to the empire.",
+    chapters: 28 },
+
+  // ── Pauline epistles ──────────────────────────────────────
+  { id: "book-romans", name: "Romans", order: 45, testament: "NT", section: "epistles",
+    coversFrom: 57, coversTo: 57, writtenFrom: 57, writtenTo: 57,
+    author: "Paul.",
+    description: "Paul's most systematic letter — the gospel for Jew and Gentile.",
+    chapters: 16 },
+  { id: "book-1corinthians", name: "1 Corinthians", order: 46, testament: "NT", section: "epistles",
+    coversFrom: 55, coversTo: 55, writtenFrom: 55, writtenTo: 55,
+    author: "Paul.",
+    description: "Pastoral correction of a divided, gifted, immature church.",
+    chapters: 16 },
+  { id: "book-2corinthians", name: "2 Corinthians", order: 47, testament: "NT", section: "epistles",
+    coversFrom: 56, coversTo: 56, writtenFrom: 56, writtenTo: 56,
+    author: "Paul.",
+    description: "Defense of his apostleship and a meditation on power-in-weakness.",
+    chapters: 13 },
+  { id: "book-galatians", name: "Galatians", order: 48, testament: "NT", section: "epistles",
+    coversFrom: 49, coversTo: 55, writtenFrom: 49, writtenTo: 55,
+    author: "Paul.",
+    description: "Justification by faith, not by works of the law.",
+    chapters: 6 },
+  { id: "book-ephesians", name: "Ephesians", order: 49, testament: "NT", section: "epistles",
+    coversFrom: 60, coversTo: 62, writtenFrom: 60, writtenTo: 62,
+    author: "Paul (during his Roman imprisonment).",
+    description: "God's eternal plan to unite all things in Christ.",
+    chapters: 6 },
+  { id: "book-philippians", name: "Philippians", order: 50, testament: "NT", section: "epistles",
+    coversFrom: 60, coversTo: 62, writtenFrom: 60, writtenTo: 62,
+    author: "Paul.",
+    description: "Joy from prison; the great Christ-hymn of chapter 2.",
+    chapters: 4 },
+  { id: "book-colossians", name: "Colossians", order: 51, testament: "NT", section: "epistles",
+    coversFrom: 60, coversTo: 62, writtenFrom: 60, writtenTo: 62,
+    author: "Paul.",
+    description: "Supremacy and sufficiency of Christ over all powers.",
+    chapters: 4 },
+  { id: "book-1thessalonians", name: "1 Thessalonians", order: 52, testament: "NT", section: "epistles",
+    coversFrom: 50, coversTo: 51, writtenFrom: 50, writtenTo: 51,
+    author: "Paul. Possibly Paul's earliest extant letter.",
+    description: "Encouragement to a young persecuted church; the Lord's return.",
+    chapters: 5 },
+  { id: "book-2thessalonians", name: "2 Thessalonians", order: 53, testament: "NT", section: "epistles",
+    coversFrom: 51, coversTo: 52, writtenFrom: 51, writtenTo: 52,
+    author: "Paul.",
+    description: "Clarifies misunderstandings about the Day of the Lord.",
+    chapters: 3 },
+  { id: "book-1timothy", name: "1 Timothy", order: 54, testament: "NT", section: "epistles",
+    coversFrom: 63, coversTo: 65, writtenFrom: 63, writtenTo: 65,
+    author: "Paul.",
+    description: "Pastoral instruction for Timothy in Ephesus.",
+    chapters: 6 },
+  { id: "book-2timothy", name: "2 Timothy", order: 55, testament: "NT", section: "epistles",
+    coversFrom: 64, coversTo: 67, writtenFrom: 64, writtenTo: 67,
+    author: "Paul. Likely his last letter.",
+    description: "Final exhortations from prison shortly before martyrdom.",
+    chapters: 4 },
+  { id: "book-titus", name: "Titus", order: 56, testament: "NT", section: "epistles",
+    coversFrom: 63, coversTo: 66, writtenFrom: 63, writtenTo: 66,
+    author: "Paul.",
+    description: "Instruction for organizing the church in Crete.",
+    chapters: 3 },
+  { id: "book-philemon", name: "Philemon", order: 57, testament: "NT", section: "epistles",
+    coversFrom: 60, coversTo: 62, writtenFrom: 60, writtenTo: 62,
+    author: "Paul.",
+    description: "Personal letter pleading for the runaway slave Onesimus.",
+    chapters: 1 },
+
+  // ── General epistles ──────────────────────────────────────
+  { id: "book-hebrews", name: "Hebrews", order: 58, testament: "NT", section: "epistles",
+    coversFrom: 60, coversTo: 70, writtenFrom: 60, writtenTo: 70,
+    author: "Anonymous.",
+    description: "Christ as the better and final priest; warning against drifting back to old patterns.",
+    chapters: 13 },
+  { id: "book-james", name: "James", order: 59, testament: "NT", section: "epistles",
+    coversFrom: 45, coversTo: 50, writtenFrom: 45, writtenTo: 50,
+    author: "James, brother of Jesus.",
+    description: "Wisdom-style letter on faith expressed in works.",
+    chapters: 5 },
+  { id: "book-1peter", name: "1 Peter", order: 60, testament: "NT", section: "epistles",
+    coversFrom: 62, coversTo: 64, writtenFrom: 62, writtenTo: 64,
+    author: "Peter.",
+    description: "Hope and holy living for suffering Christians scattered across Asia Minor.",
+    chapters: 5 },
+  { id: "book-2peter", name: "2 Peter", order: 61, testament: "NT", section: "epistles",
+    coversFrom: 64, coversTo: 68, writtenFrom: 64, writtenTo: 68,
+    author: "Peter (traditional).",
+    description: "Warning against false teachers; certainty of the Lord's return.",
+    chapters: 3 },
+  { id: "book-1john", name: "1 John", order: 62, testament: "NT", section: "epistles",
+    coversFrom: 85, coversTo: 95, writtenFrom: 85, writtenTo: 95,
+    author: "John the apostle (traditional).",
+    description: "Tests of true faith — light, love, and right confession of Jesus.",
+    chapters: 5 },
+  { id: "book-2john", name: "2 John", order: 63, testament: "NT", section: "epistles",
+    coversFrom: 85, coversTo: 95, writtenFrom: 85, writtenTo: 95,
+    author: "John the apostle (traditional).",
+    description: "Brief letter on truth and love; warning against deceivers.",
+    chapters: 1 },
+  { id: "book-3john", name: "3 John", order: 64, testament: "NT", section: "epistles",
+    coversFrom: 85, coversTo: 95, writtenFrom: 85, writtenTo: 95,
+    author: "John the apostle (traditional).",
+    description: "Personal letter to Gaius commending hospitality.",
+    chapters: 1 },
+  { id: "book-jude", name: "Jude", order: 65, testament: "NT", section: "epistles",
+    coversFrom: 65, coversTo: 80, writtenFrom: 65, writtenTo: 80,
+    author: "Jude, brother of Jesus and James.",
+    description: "Sharp warning against false teachers infiltrating the church.",
+    chapters: 1 },
+
+  // ── Apocalypse ────────────────────────────────────────────
+  { id: "book-revelation", name: "Revelation", order: 66, testament: "NT", section: "apocalypse",
+    coversFrom: 95, coversTo: 95, writtenFrom: 95, writtenTo: 95,
+    author: "John (traditional).",
+    description: "Apocalyptic vision of the exalted Christ, the suffering church, and the new heaven and new earth.",
+    chapters: 22 }
+];
+
 if (typeof module !== "undefined") module.exports = BibleTimeline;
 
 

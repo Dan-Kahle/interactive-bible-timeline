@@ -1023,3 +1023,138 @@ input[type="range"] {
   .icon-btn { width: 36px; height: 36px; }
   .zoom-btn { width: 32px; height: 32px; }
 }
+
+/* =========================================================
+   Books of the Bible — desktop bracket lane
+   ========================================================= */
+.book {
+  position: absolute;
+  border-radius: 4px;
+  cursor: pointer;
+  z-index: 3;
+  background: var(--bg-elev);
+  border: 1px solid var(--line-strong);
+  border-left-width: 4px;
+  overflow: hidden;
+  transition: transform 0.12s ease, box-shadow 0.12s, background 0.18s, border-color 0.18s;
+  -webkit-tap-highlight-color: transparent;
+  font-family: var(--font-ui);
+}
+.book:hover, .book:focus-visible {
+  transform: translateX(-1px);
+  box-shadow: var(--shadow-1);
+  outline: none;
+  background: var(--bg);
+}
+.book__label {
+  font-size: 0.66rem;
+  font-weight: 600;
+  color: var(--ink);
+  padding: 4px 5px;
+  line-height: 1.15;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: 0.01em;
+}
+
+/* Section colors — set the left border (which is the visible "spine") */
+.book--torah          { border-left-color: #8d6e3a; }
+.book--history        { border-left-color: #4b6e9e; }
+.book--wisdom         { border-left-color: #b08a3e; }
+.book--major-prophets { border-left-color: #2f7d4f; }
+.book--minor-prophets { border-left-color: #5a8458; }
+.book--gospels        { border-left-color: #c2410c; }
+.book--history-nt     { border-left-color: #6e4b9e; }
+.book--epistles       { border-left-color: #a55a3e; }
+.book--apocalypse     { border-left-color: #7c3a4f; }
+
+/* world-event styling (sets event-band variants apart from biblical events) */
+.event-band.world .event-line {
+  border-top-style: dashed;
+  border-top-color: var(--ink-mute);
+  opacity: 0.5;
+}
+.event-band.world.span .event-line {
+  background: color-mix(in srgb, var(--ink-mute) 7%, transparent);
+  border-left-color: var(--ink-mute);
+  border-right-color: var(--ink-mute);
+}
+.event-band.world .event-label {
+  background: var(--bg-elev);
+  color: var(--ink-soft);
+  border-color: var(--line-strong);
+  font-style: italic;
+  font-weight: 500;
+}
+.event-band.world .event-label::before {
+  content: "🜨 ";
+  font-style: normal;
+  opacity: 0.6;
+  margin-right: 2px;
+}
+.event-band.world .event-label:hover {
+  background: var(--ink-soft);
+  color: var(--bg-elev);
+  border-color: var(--ink-soft);
+}
+.event-band.world .event-connector { border-top-color: var(--ink-mute); }
+
+/* =========================================================
+   Mobile — books inside era headers
+   ========================================================= */
+.list-era-head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding-bottom: 0.55rem;
+}
+.list-era-head__name {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+}
+.list-era-head__books {
+  display: flex;
+  gap: 0.35rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 0.15rem;
+  margin-right: -1rem;  /* let chip strip bleed to edge */
+}
+.list-era-head__books::-webkit-scrollbar { display: none; }
+
+.book-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  border-left-width: 3px;
+  background: var(--bg-elev);
+  color: var(--ink);
+  font-size: 0.74rem;
+  font-weight: 500;
+  font-family: var(--font-ui);
+  text-transform: none;
+  letter-spacing: 0;
+  white-space: nowrap;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.18s, color 0.18s, transform 0.08s;
+}
+.book-chip:active { transform: scale(0.95); }
+.book-chip:hover { background: var(--bg); }
+.book-chip--torah          { border-left-color: #8d6e3a; }
+.book-chip--history        { border-left-color: #4b6e9e; }
+.book-chip--wisdom         { border-left-color: #b08a3e; }
+.book-chip--major-prophets { border-left-color: #2f7d4f; }
+.book-chip--minor-prophets { border-left-color: #5a8458; }
+.book-chip--gospels        { border-left-color: #c2410c; }
+.book-chip--history-nt     { border-left-color: #6e4b9e; }
+.book-chip--epistles       { border-left-color: #a55a3e; }
+.book-chip--apocalypse     { border-left-color: #7c3a4f; }
