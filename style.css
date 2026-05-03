@@ -733,3 +733,178 @@ input[type="range"] {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* =========================================================
+   Mobile list view  (active when .timeline-scroll has .mobile-mode)
+   ========================================================= */
+
+/* In mobile mode the scroll wrapper is a plain flow container */
+.timeline-scroll.mobile-mode {
+  overflow-x: visible;
+  padding: 0;
+}
+.timeline-scroll.mobile-mode .year-axis { display: none; }
+
+.timeline.list-view {
+  position: static;
+  margin-left: 0;
+  border-left: none;
+  height: auto !important;
+  min-width: unset !important;
+  padding: 0 0 4rem;
+}
+
+/* Era section heading */
+.list-era-head {
+  position: sticky;
+  top: 0;                /* sticks under the topbar — JS sets this dynamically */
+  background: rgba(247, 241, 225, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 10;
+  padding: 0.45rem 1rem 0.45rem 1.1rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  border-bottom: 1px solid var(--line);
+  border-top: 2px solid var(--accent);
+  margin-top: 0.5rem;
+}
+@media (prefers-color-scheme: dark) {
+  .list-era-head { background: rgba(21, 17, 10, 0.95); }
+}
+
+/* Card wrapper */
+.list-card {
+  display: flex;
+  gap: 0;
+  padding: 0 1rem 0 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.12s;
+}
+.list-card:active { background: rgba(139, 58, 47, 0.06); }
+.list-card.selected > .list-card__body {
+  border-left: 3px solid var(--gold);
+  padding-left: calc(0.85rem - 3px);
+}
+
+/* Left gutter: dot + connecting line */
+.list-card__left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 40px;
+  flex-shrink: 0;
+  padding-top: 14px;
+}
+.list-card__dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--ink-soft);
+  flex-shrink: 0;
+  box-shadow: 0 0 0 3px var(--bg);
+  z-index: 1;
+}
+.list-card__dot--event {
+  background: var(--accent);
+  width: 13px;
+  height: 13px;
+  border-radius: 3px;
+  transform: rotate(45deg);
+}
+.list-card__line {
+  width: 2px;
+  flex: 1;
+  background: var(--line);
+  min-height: 12px;
+}
+
+/* Card body */
+.list-card__body {
+  flex: 1;
+  padding: 0.75rem 0 0.75rem 0.85rem;
+  border-bottom: 1px solid var(--line);
+}
+.list-card:last-child .list-card__body { border-bottom: none; }
+
+/* Badge row */
+.list-card__badges {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.3rem;
+  flex-wrap: wrap;
+}
+.list-card__year {
+  font-size: 0.72rem;
+  font-family: var(--font-ui);
+  font-feature-settings: "tnum";
+  color: var(--ink-mute);
+  font-weight: 500;
+}
+.list-card__cat {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  padding: 1px 7px;
+  border-radius: 999px;
+  color: white;
+  background: var(--c-other);
+}
+
+/* category colors for cat-badge */
+.cat-badge--patriarch    { background: var(--c-patriarch); }
+.cat-badge--matriarch    { background: var(--c-matriarch); }
+.cat-badge--king-judah   { background: var(--c-king-judah); }
+.cat-badge--king-israel  { background: var(--c-king-israel); }
+.cat-badge--queen        { background: var(--c-queen); }
+.cat-badge--foreign-king { background: var(--c-foreign-king); }
+.cat-badge--prophet      { background: var(--c-prophet); }
+.cat-badge--priest       { background: var(--c-priest); }
+.cat-badge--judge        { background: var(--c-judge); }
+.cat-badge--apostle      { background: var(--c-apostle); }
+.cat-badge--messiah      { background: var(--c-messiah); color: #1c1810; }
+.cat-badge--event        { background: var(--accent); }
+.cat-badge--other        { background: var(--c-other); }
+
+/* Card name + dates */
+.list-card__name {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--ink);
+  margin-bottom: 0.15rem;
+}
+.list-card__name--event { color: var(--accent); font-size: 1.05rem; }
+.list-card__dates {
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  margin-bottom: 0.35rem;
+  font-feature-settings: "tnum";
+}
+.list-card__desc {
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+  line-height: 1.45;
+}
+
+/* Empty state */
+.list-empty {
+  text-align: center;
+  color: var(--ink-mute);
+  padding: 4rem 2rem;
+  font-style: italic;
+}
+
+/* On desktop: never show mobile list chrome, use normal scrolling */
+@media (min-width: 768px) {
+  .timeline-scroll.mobile-mode { overflow-x: auto; }
+  .timeline.list-view { position: relative; }
+  .list-era-head { position: static; }
+}
