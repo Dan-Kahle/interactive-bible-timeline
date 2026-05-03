@@ -2,38 +2,69 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Interactive Bible Timeline</title>
+  <title>Bible Timeline</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#1c1810">
+  <meta name="theme-color" content="#f7f1e1" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#15110a" media="(prefers-color-scheme: dark)">
+  <meta name="description" content="An interactive vertical timeline of biblical people and events.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <script>
+    // Apply saved theme before paint to avoid flash
+    (function () {
+      try {
+        var saved = localStorage.getItem("bt-theme");
+        if (saved === "light" || saved === "dark") {
+          document.documentElement.setAttribute("data-theme", saved);
+        }
+      } catch (e) {}
+    })();
+  </script>
 </head>
 <body>
-  <header class="topbar" role="banner">
-    <div class="topbar-row primary">
-      <button class="icon-btn menu-btn" id="menuToggle" aria-label="Open filters" aria-controls="filterDrawer" aria-expanded="false">
+  <a class="skip-link" href="#timeline">Skip to timeline</a>
+
+  <header class="topbar" id="topbar" role="banner">
+    <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+    <div class="topbar-row">
+      <button class="icon-btn" id="menuToggle" aria-label="Open filters" aria-controls="filterDrawer" aria-expanded="false">
         <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
           <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
         </svg>
       </button>
-      <h1>Bible Timeline</h1>
-      <button class="icon-btn" id="zoomOut" aria-label="Zoom out">
-        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
-      </button>
-      <button class="icon-btn" id="zoomIn" aria-label="Zoom in">
-        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
+
+      <div class="brand">
+        <h1>Bible Timeline</h1>
+        <span class="brand-sub" id="currentEra" aria-live="polite">Adam to the Apostles</span>
+      </div>
+
+      <button class="icon-btn" id="themeToggle" aria-label="Toggle theme">
+        <svg class="icon-sun" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+          <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2" fill="none"/>
+          <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="2" fill="none" stroke-linejoin="round"/>
+        </svg>
       </button>
     </div>
+
     <div class="topbar-row search-row">
       <div class="search-wrap">
         <svg class="search-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
           <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2" fill="none"/>
           <path d="m20 20-3-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
         </svg>
-        <input type="search" id="search" placeholder="Search people, places, tags...">
+        <input type="search" id="search" placeholder="Search people, places, tags…" autocomplete="off">
       </div>
+      <button class="icon-btn zoom-btn" id="zoomOut" aria-label="Zoom out">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
+      </button>
+      <button class="icon-btn zoom-btn" id="zoomIn" aria-label="Zoom in">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
+      </button>
     </div>
   </header>
 
@@ -78,11 +109,20 @@
         <div class="range-ticks"><span>compact</span><span>spacious</span></div>
       </section>
 
+      <section class="filter-section">
+        <h3>Theme</h3>
+        <div class="chip-group" id="themeChips">
+          <button type="button" class="chip" data-theme-value="light">Light</button>
+          <button type="button" class="chip" data-theme-value="dark">Dark</button>
+          <button type="button" class="chip" data-theme-value="auto">Auto</button>
+        </div>
+      </section>
+
       <button class="btn ghost" id="resetFilters" type="button">Reset filters</button>
 
       <p class="legend-note">
         Academic chronology: late-date Exodus (~1250 BC), Thiele's chronology for the kings.
-        Genesis 5/11 ages from the Masoretic Text are shown on a compressed band and labeled as textual.
+        Genesis 5/11 ages from the Masoretic Text are shown on a compressed band, labeled as textual.
       </p>
     </div>
   </aside>
@@ -94,6 +134,12 @@
       <div class="timeline" id="timeline"></div>
     </div>
   </main>
+
+  <button class="fab scroll-top" id="scrollTopBtn" aria-label="Scroll to top">
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+      <path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </svg>
+  </button>
 
   <aside class="detail-panel" id="detailPanel" aria-hidden="true" aria-label="Details">
     <div class="detail-handle" aria-hidden="true"></div>
