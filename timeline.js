@@ -293,12 +293,28 @@
     return el;
   }
 
-  // ── Main render ───────────────────────────────────────────────────────────
+  // ── Breakpoint helper ─────────────────────────────────────────────────────
+  function isMobile() { return window.innerWidth < 768; }
+
+  // ── Main render dispatcher ────────────────────────────────────────────────
   let selectedId = null;
 
   function render() {
+    if (isMobile()) {
+      renderMobileList();
+    } else {
+      renderDesktop();
+    }
+  }
+
+  // ── Desktop bar-chart render ──────────────────────────────────────────────
+  function renderDesktop() {
+    timelineScroll.classList.remove("mobile-mode");
     timelineEl.innerHTML = "";
+    timelineEl.classList.remove("list-view");
     timelineEl.style.height = totalHeight() + "px";
+    timelineEl.style.minWidth = "";
+    yearAxis.style.display = "";
     renderGrid();
 
     BibleTimeline.events.forEach((ev) => {
@@ -319,6 +335,198 @@
     }
 
     renderAxis();
+  }
+
+  // ── Mobile list-view render ───────────────────────────────────────────────
+  const ERA_DISPLAY = {
+    "primeval":          "Primeval Era",
+    "patriarchal":       "Patriarchs",
+    "exodus":            "Exodus & Wilderness",
+    "conquest":          "Conquest of Canaan",
+    "judges":            "Period of the Judges",
+    "united-monarchy":   "United Kingdom",
+    "divided-monarchy":  "Divided Kingdom",
+    "exile":             "Babylonian Exile",
+    "post-exile":        "Return & Restoration",
+    "second-temple":     "Second Temple Period",
+    "nt-gospels":        "Gospels & Jesus' Life",
+    "early-church":      "Early Church",
+  };
+
+  function renderMobileList() {
+    timelineScroll.classList.add("mobile-mode");
+    yearAxis.style.display = "none";
+    timelineEl.style.height = "";
+    timelineEl.style.minWidth = "";
+    timelineEl.innerHTML = "";
+    timelineEl.classList.add("list-view");
+
+    // Build a merged, sorted list of visible people + events
+    const items = [];
+
+    BibleTimeline.people.forEach((p) => {
+      if (matchPerson(p)) items.push({ type: "person", year: p.birthYear ?? 0, data: p });
+    });
+    BibleTimeline.events.forEach((ev) => {
+      if (matchEvent(ev)) items.push({ type: "event", year: ev.year, data: ev });
+    });
+
+    items.sort((a, b) => a.year - b.year);
+
+    if (items.length === 0) {
+      const empty = document.createElement("p");
+      empty.className = "list-empty";
+      empty.textContent = "No results. Try adjusting your filters or search.";
+      timelineEl.appendChild(empty);
+      return;
+    }
+
+    let lastEra = null;
+
+    const topbarH = document.querySelector(".topbar")?.offsetHeight ?? 104;
+
+    items.forEach((item) => {
+      const era = item.type === "person" ? item.data.era : item.data.category;
+
+      // Era section header
+      if (item.type === "person" && era !== lastEra) {
+        lastEra = era;
+        const heading = document.createElement("div");
+        heading.className = "list-era-head";
+        heading.style.top = topbarH + "px";
+        heading.textContent = ERA_DISPLAY[era] ?? era.replace(/-/g, " ");
+        timelineEl.appendChild(heading);
+      }
+
+      const card = item.type === "person"
+        ? makePersonCard(item.data)
+        : makeEventCard(item.data);
+
+      timelineEl.appendChild(card);
+    });
+  }
+
+  function makePersonCard(p) {
+    const card = document.createElement("div");
+    card.className = `list-card list-card--${p.category}`;
+    card.dataset.id = p.id;
+    if (selectedId === p.id) card.classList.add("selected");
+
+    const left = document.createElement("div");
+    left.className = "list-card__left";
+
+    const dot = document.createElement("div");
+    dot.className = "list-card__dot";
+    left.appendChild(dot);
+
+    const line = document.createElement("div");
+    line.className = "list-card__line";
+    left.appendChild(line);
+
+    const body = document.createElement("div");
+    body.className = "list-card__body";
+
+    const yearBadge = document.createElement("span");
+    yearBadge.className = "list-card__year";
+    yearBadge.textContent = fmt(p.birthYear);
+
+    const catBadge = document.createElement("span");
+    catBadge.className = `list-card__cat cat-badge--${p.category}`;
+    catBadge.textContent = (p.category ?? "").replace(/-/g, " ");
+
+    const badgeRow = document.createElement("div");
+    badgeRow.className = "list-card__badges";
+    badgeRow.appendChild(yearBadge);
+    badgeRow.appendChild(catBadge);
+
+    const name = document.createElement("div");
+    name.className = "list-card__name";
+    name.textContent = p.name;
+
+    const dates = document.createElement("div");
+    dates.className = "list-card__dates";
+    dates.textContent = fmtRange(p.birthYear, p.deathYear) +
+      (p.textualAge ? ` · ${p.textualAge} yrs` : "");
+
+    body.appendChild(badgeRow);
+    body.appendChild(name);
+    body.appendChild(dates);
+
+    if (p.description) {
+      const desc = document.createElement("div");
+      desc.className = "list-card__desc";
+      desc.textContent = p.description.length > 140
+        ? p.description.slice(0, 137) + "…"
+        : p.description;
+      body.appendChild(desc);
+    }
+
+    card.appendChild(left);
+    card.appendChild(body);
+
+    card.addEventListener("click", () => {
+      selectedId = p.id;
+      timelineEl.querySelectorAll(".list-card.selected")
+        .forEach((el) => el.classList.remove("selected"));
+      card.classList.add("selected");
+      openDetail(personDetailHTML(p));
+    });
+
+    return card;
+  }
+
+  function makeEventCard(ev) {
+    const card = document.createElement("div");
+    card.className = "list-card list-card--event";
+
+    const left = document.createElement("div");
+    left.className = "list-card__left";
+    const dot = document.createElement("div");
+    dot.className = "list-card__dot list-card__dot--event";
+    left.appendChild(dot);
+    const line = document.createElement("div");
+    line.className = "list-card__line";
+    left.appendChild(line);
+
+    const body = document.createElement("div");
+    body.className = "list-card__body";
+
+    const isSpan = ev.endYear != null && ev.endYear !== ev.year;
+    const yearBadge = document.createElement("span");
+    yearBadge.className = "list-card__year";
+    yearBadge.textContent = isSpan
+      ? fmt(ev.year) + " – " + fmt(ev.endYear)
+      : fmt(ev.year);
+
+    const catBadge = document.createElement("span");
+    catBadge.className = "list-card__cat cat-badge--event";
+    catBadge.textContent = (ev.category ?? "event").replace(/-/g, " ");
+
+    const badgeRow = document.createElement("div");
+    badgeRow.className = "list-card__badges";
+    badgeRow.appendChild(yearBadge);
+    badgeRow.appendChild(catBadge);
+
+    const name = document.createElement("div");
+    name.className = "list-card__name list-card__name--event";
+    name.textContent = "★ " + ev.name;
+
+    body.appendChild(badgeRow);
+    body.appendChild(name);
+
+    if (ev.description) {
+      const desc = document.createElement("div");
+      desc.className = "list-card__desc";
+      desc.textContent = ev.description.length > 120
+        ? ev.description.slice(0, 117) + "…"
+        : ev.description;
+      body.appendChild(desc);
+    }
+
+    card.appendChild(left);
+    card.appendChild(body);
+    card.addEventListener("click", () => openDetail(eventDetailHTML(ev)));
+    return card;
   }
 
   // ── Detail panel ──────────────────────────────────────────────────────────
