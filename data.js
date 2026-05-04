@@ -370,6 +370,123 @@ BibleTimeline.people.push(
     parents: ["jacob", "rachel"],
     description: "Youngest son of Jacob; only full brother of Joseph. Ancestor of the tribe of Benjamin, which produced King Saul and the apostle Paul.",
     tags: ["twelve-tribes"]
+  },
+  {
+    id: "reuben", name: "Reuben",
+    birthYear: -1815, deathYear: null, textualAge: null,
+    dateCertainty: "approximate", era: "patriarchal", category: "patriarch", testament: "OT",
+    book: "Genesis", references: ["Genesis 29:32", "Genesis 49:3-4"],
+    parents: ["jacob", "leah"],
+    description: "Firstborn son of Jacob and Leah. Lost his birthright due to sleeping with Bilhah. Ancestor of the tribe of Reuben.",
+    tags: ["twelve-tribes"]
+  },
+  {
+    id: "simeon-jacob", name: "Simeon",
+    birthYear: -1813, deathYear: null, textualAge: null,
+    dateCertainty: "approximate", era: "patriarchal", category: "patriarch", testament: "OT",
+    book: "Genesis", references: ["Genesis 29:33", "Genesis 49:5-7"],
+    parents: ["jacob", "leah"],
+    description: "Second son of Jacob and Leah. Took part in avenging the rape of Dinah. Ancestor of the tribe of Simeon.",
+    tags: ["twelve-tribes"]
+  },
+  {
+    id: "levi", name: "Levi",
+    birthYear: -1810, deathYear: null, textualAge: null,
+    dateCertainty: "approximate", era: "patriarchal", category: "patriarch", testament: "OT",
+    book: "Genesis", references: ["Genesis 29:34", "Genesis 49:5-7"],
+    parents: ["jacob", "leah"],
+    description: "Third son of Jacob and Leah. Ancestor of the Levites, the priestly tribe. His descendants include Moses and Aaron.",
+    tags: ["twelve-tribes", "levite"]
+  },
+  {
+    id: "issachar", name: "Issachar",
+    birthYear: -1808, deathYear: null, textualAge: null,
+    dateCertainty: "approximate", era: "patriarchal", category: "patriarch", testament: "OT",
+    book: "Genesis", references: ["Genesis 30:17-18", "Genesis 49:14-15"],
+    parents: ["jacob", "leah"],
+    description: "Fifth son of Jacob and Leah. Described as a strong donkey resting between burdens. Ancestor of the tribe of Issachar.",
+    tags: ["twelve-tribes"]
+  },
+  {
+    id: "zebulun", name: "Zebulun",
+    birthYear: -1806, deathYear: null, textualAge: null,
+    dateCertainty: "approximate", era: "patriarchal", category: "patriarch", testament: "OT",
+    book: "Genesis", references: ["Genesis 30:19-20", "Genesis 49:13"],
+    parents: ["jacob", "leah"],
+    description: "Sixth son of Jacob and Leah. Dwelt by the seashore. Ancestor of the tribe of Zebulun.",
+    tags: ["twelve-tribes"]
+  },
+  {
+    id: "naphtali", name: "Naphtali",
+    birthYear: -1806, deathYear: null, textualAge: null,
+    dateCertainty: "approximate", era: "patriarchal", category: "patriarch", testament: "OT",
+    book: "Genesis", references: ["Genesis 30:7-8", "Genesis 49:21"],
+    parents: ["jacob", "bilhah"],
+    description: "Son of Jacob and Bilhah, Rachel's servant. Ancestor of the tribe of Naphtali.",
+    tags: ["twelve-tribes"]
+  },
+  {
+    id: "gad", name: "Gad",
+    birthYear: -1805, deathYear: null, textualAge: null,
+    dateCertainty: "approximate", era: "patriarchal", category: "patriarch", testament: "OT",
+    book: "Genesis", references: ["Genesis 30:10-11", "Genesis 49:19"],
+    parents: ["jacob", "zilpah"],
+    description: "Son of Jacob and Zilpah, Leah's servant. Ancestor of the tribe of Gad.",
+    tags: ["twelve-tribes"]
+  },
+  {
+    id: "asher", name: "Asher",
+    birthYear: -1804, deathYear: null, textualAge: null,
+    dateCertainty: "approximate", era: "patriarchal", category: "patriarch", testament: "OT",
+    book: "Genesis", references: ["Genesis 30:12-13", "Genesis 49:20"],
+    parents: ["jacob", "zilpah"],
+    description: "Son of Jacob and Zilpah, Leah's servant. Blessed with abundance. Ancestor of the tribe of Asher.",
+    tags: ["twelve-tribes"]
+  },
+  {
+    id: "dinah", name: "Dinah",
+    birthYear: -1800, deathYear: null, textualAge: null,
+    dateCertainty: "approximate", era: "patriarchal", category: "matriarch", testament: "OT",
+    book: "Genesis", references: ["Genesis 30:21", "Genesis 34"],
+    parents: ["jacob", "leah"],
+    description: "Daughter of Jacob and Leah. Her rape at Shechem led to the deceptive revenge of her brothers.",
+    tags: ["matriarch"]
+  },
+  {
+    id: "leah", name: "Leah",
+    birthYear: -1805, deathYear: null, textualAge: null,
+    dateCertainty: "approximate", era: "patriarchal", category: "matriarch", testament: "OT",
+    book: "Genesis", references: ["Genesis 29-35"],
+    spouses: ["jacob"], children: ["reuben", "simeon-jacob", "levi", "judah", "issachar", "zebulun", "dinah"],
+    description: "First wife of Jacob. Mother of six sons and a daughter who became mothers of six tribes of Israel.",
+    tags: ["matriarch"]
+  },
+  {
+    id: "bilhah", name: "Bilhah",
+    birthYear: -1810, deathYear: null, textualAge: null,
+    dateCertainty: "approximate", era: "patriarchal", category: "matriarch", testament: "OT",
+    book: "Genesis", references: ["Genesis 29:29", "Genesis 30:3-8"],
+    spouses: ["jacob"], children: ["dan", "naphtali"],
+    description: "Rachel's maidservant; bore two sons for Jacob: Dan and Naphtali.",
+    tags: ["matriarch"]
+  },
+  {
+    id: "zilpah", name: "Zilpah",
+    birthYear: -1810, deathYear: null, textualAge: null,
+    dateCertainty: "approximate", era: "patriarchal", category: "matriarch", testament: "OT",
+    book: "Genesis", references: ["Genesis 29:24", "Genesis 30:9-13"],
+    spouses: ["jacob"], children: ["gad", "asher"],
+    description: "Leah's maidservant; bore two sons for Jacob: Gad and Asher.",
+    tags: ["matriarch"]
+  },
+  {
+    id: "dan", name: "Dan",
+    birthYear: -1804, deathYear: null, textualAge: null,
+    dateCertainty: "approximate", era: "patriarchal", category: "patriarch", testament: "OT",
+    book: "Genesis", references: ["Genesis 30:5-6", "Genesis 49:16-18"],
+    parents: ["jacob", "bilhah"],
+    description: "Son of Jacob and Bilhah. Ancestor of the tribe of Dan. Described as one who 'shall judge his people.'",
+    tags: ["twelve-tribes"]
   }
 );
 
@@ -463,6 +580,51 @@ BibleTimeline.people.push(
     tags: ["prophet", "moab"]
   },
   {
+    id: "nadab-priest", name: "Nadab (Aaron's son)",
+    birthYear: -1330, deathYear: -1230, textualAge: null,
+    dateCertainty: "approximate", era: "exodus", category: "priest", testament: "OT",
+    book: "Leviticus", references: ["Leviticus 10:1-2", "Exodus 6:23"],
+    parents: ["aaron"],
+    description: "Elder son of Aaron. Offered strange/profane fire before the LORD with his brother Abihu and were both consumed by fire.",
+    tags: ["priest"]
+  },
+  {
+    id: "abihu", name: "Abihu",
+    birthYear: -1328, deathYear: -1230, textualAge: null,
+    dateCertainty: "approximate", era: "exodus", category: "priest", testament: "OT",
+    book: "Leviticus", references: ["Leviticus 10:1-2", "Exodus 6:23"],
+    parents: ["aaron"],
+    description: "Second son of Aaron. Offered strange/profane fire with his brother Nadab and were both consumed by fire as punishment.",
+    tags: ["priest"]
+  },
+  {
+    id: "eleazar", name: "Eleazar",
+    birthYear: -1325, deathYear: -1200, textualAge: null,
+    dateCertainty: "approximate", era: "exodus", category: "priest", testament: "OT",
+    book: "Exodus", references: ["Exodus 6:23", "Numbers 20:25-29", "Joshua 14:1"],
+    parents: ["aaron"], children: ["phinehas"],
+    description: "Third son of Aaron; succeeded his father as High Priest after Nadab and Abihu's death. Father of Phinehas.",
+    tags: ["priest", "high-priest"]
+  },
+  {
+    id: "ithamar", name: "Ithamar",
+    birthYear: -1323, deathYear: -1200, textualAge: null,
+    dateCertainty: "approximate", era: "exodus", category: "priest", testament: "OT",
+    book: "Exodus", references: ["Exodus 6:23", "1 Chronicles 24:4"],
+    parents: ["aaron"],
+    description: "Fourth son of Aaron. Oversaw the fabric-workers and leather-workers of the Tabernacle. Ancestor of a priestly division.",
+    tags: ["priest"]
+  },
+  {
+    id: "phinehas", name: "Phinehas (son of Eleazar)",
+    birthYear: -1310, deathYear: -1190, textualAge: null,
+    dateCertainty: "approximate", era: "exodus", category: "priest", testament: "OT",
+    book: "Numbers", references: ["Numbers 25:10-13", "Psalm 106:30-31"],
+    parents: ["eleazar"],
+    description: "Grandson of Aaron; high priest succeeding his father Eleazar. Zealous for the LORD; stopped a plague by executing an Israelite man and his Midianite companion.",
+    tags: ["priest", "high-priest"]
+  },
+  {
     id: "rahab", name: "Rahab",
     birthYear: -1230, deathYear: null, textualAge: null,
     dateCertainty: "approximate", era: "conquest", category: "other", testament: "OT",
@@ -524,10 +686,29 @@ BibleTimeline.people.push(
     tags: ["judge", "ammonite-war"]
   },
   {
+    id: "manoah", name: "Manoah",
+    birthYear: -1140, deathYear: null, textualAge: null,
+    dateCertainty: "approximate", era: "judges", category: "patriarch", testament: "OT",
+    book: "Judges", references: ["Judges 13"],
+    spouses: ["manoah-wife"], children: ["samson"],
+    description: "Father of Samson from the tribe of Dan. Received the annunciation of Samson's birth from the angel of the LORD.",
+    tags: []
+  },
+  {
+    id: "manoah-wife", name: "Wife of Manoah",
+    birthYear: -1135, deathYear: null, textualAge: null,
+    dateCertainty: "approximate", era: "judges", category: "matriarch", testament: "OT",
+    book: "Judges", references: ["Judges 13"],
+    spouses: ["manoah"], children: ["samson"],
+    description: "Mother of Samson. Barren until the angel of the LORD announced she would bear a son dedicated to God as a Nazirite. Her name is not recorded in Scripture.",
+    tags: []
+  },
+  {
     id: "samson", name: "Samson",
     birthYear: -1100, deathYear: -1070, textualAge: null,
     dateCertainty: "approximate", era: "judges", category: "judge", testament: "OT",
     book: "Judges", references: ["Judges 13-16", "Hebrews 11:32"],
+    parents: ["manoah", "manoah-wife"],
     description: "Nazirite judge of supernatural strength from the tribe of Dan. Fought the Philistines; betrayed by Delilah; pulled down the temple of Dagon, killing himself with thousands of Philistines.",
     tags: ["judge", "nazirite", "philistines"]
   },
@@ -567,6 +748,24 @@ BibleTimeline.people.push(
     tags: ["priest", "high-priest", "shiloh"]
   },
   {
+    id: "hophni", name: "Hophni",
+    birthYear: -1105, deathYear: -1050, textualAge: null,
+    dateCertainty: "approximate", era: "judges", category: "priest", testament: "OT",
+    book: "1 Samuel", references: ["1 Samuel 1:3", "1 Samuel 2:12-17", "1 Samuel 4:4-11"],
+    parents: ["eli"],
+    description: "Elder son of Eli; priest at Shiloh. Known for corrupt practices and irreverence. Killed by the Philistines when the Ark of the Covenant was captured.",
+    tags: ["priest"]
+  },
+  {
+    id: "phinehas-eli", name: "Phinehas (Eli's son)",
+    birthYear: -1103, deathYear: -1050, textualAge: null,
+    dateCertainty: "approximate", era: "judges", category: "priest", testament: "OT",
+    book: "1 Samuel", references: ["1 Samuel 1:3", "1 Samuel 2:12-17", "1 Samuel 4:4-11"],
+    parents: ["eli"],
+    description: "Younger son of Eli; priest at Shiloh. Shared his brother's corrupt practices. Killed by the Philistines on the same day the Ark was captured; his wife bore him a son after hearing the news.",
+    tags: ["priest"]
+  },
+  {
     id: "samuel", name: "Samuel",
     birthYear: -1075, deathYear: -1012, textualAge: null,
     dateCertainty: "approximate", era: "judges", category: "prophet", testament: "OT",
@@ -583,6 +782,55 @@ BibleTimeline.people.push(
     spouses: ["elkanah"], children: ["samuel"],
     description: "Mother of Samuel. Vowed to give her son to the LORD if granted a child. Her prayer of thanksgiving (1 Sam 2) prefigures the Magnificat.",
     tags: ["matriarch", "prayer"]
+  },
+  {
+    id: "tola", name: "Tola",
+    birthYear: -1130, deathYear: -1107, textualAge: null,
+    dateCertainty: "textual", era: "judges", category: "judge", testament: "OT",
+    book: "Judges", references: ["Judges 10:1-2"],
+    description: "Judge from Issachar. Judged Israel 23 years after Abimelech's reign. Details of his leadership are minimal.",
+    tags: ["judge", "issachar"]
+  },
+  {
+    id: "jair", name: "Jair",
+    birthYear: -1120, deathYear: -1098, textualAge: null,
+    dateCertainty: "textual", era: "judges", category: "judge", testament: "OT",
+    book: "Judges", references: ["Judges 10:3-5"],
+    children: ["jair-30-sons"],
+    description: "Judge from Gilead. Judged Israel 22 years. Had 30 sons who rode 30 donkeys and governed 30 towns.",
+    tags: ["judge", "gilead"]
+  },
+  {
+    id: "ibzan", name: "Ibzan",
+    birthYear: -1095, deathYear: -1088, textualAge: null,
+    dateCertainty: "textual", era: "judges", category: "judge", testament: "OT",
+    book: "Judges", references: ["Judges 12:8-10"],
+    description: "Judge from Bethlehem. Judged Israel 7 years. Had 30 sons and 30 daughters; the daughters he gave to men outside the family.",
+    tags: ["judge", "bethlehem"]
+  },
+  {
+    id: "elon", name: "Elon",
+    birthYear: -1085, deathYear: -1075, textualAge: null,
+    dateCertainty: "textual", era: "judges", category: "judge", testament: "OT",
+    book: "Judges", references: ["Judges 12:11-12"],
+    description: "Judge from Zebulun. Judged Israel 10 years. Buried in Aijalon.",
+    tags: ["judge", "zebulun"]
+  },
+  {
+    id: "abdon", name: "Abdon",
+    birthYear: -1075, deathYear: -1067, textualAge: null,
+    dateCertainty: "textual", era: "judges", category: "judge", testament: "OT",
+    book: "Judges", references: ["Judges 12:13-15"],
+    description: "Judge from Pirathon. Judged Israel 8 years. Had 40 sons and 30 grandsons who rode on 70 donkeys.",
+    tags: ["judge", "ephraim"]
+  },
+  {
+    id: "shamgar", name: "Shamgar",
+    birthYear: -1170, deathYear: -1150, textualAge: null,
+    dateCertainty: "textual", era: "judges", category: "judge", testament: "OT",
+    book: "Judges", references: ["Judges 3:31", "Judges 5:6"],
+    description: "Judge who killed 600 Philistines with an ox goad. Mentioned briefly between Ehud and Deborah. Possibly a contemporary of Deborah.",
+    tags: ["judge", "philistines"]
   }
 );
 
@@ -1516,6 +1764,134 @@ BibleTimeline.people.push(
     book: "Acts", references: ["Acts 25:11", "2 Timothy 4"], reignStart: 54, reignEnd: 68,
     description: "Roman emperor whose persecution after the great fire of Rome (64 AD) is traditionally tied to the deaths of Peter and Paul.",
     tags: ["rome", "emperor", "persecutor"]
+  },
+  {
+    id: "simon-zelotes", name: "Simon (the Zealot)",
+    birthYear: 0, deathYear: 70, textualAge: null,
+    dateCertainty: "approximate", era: "nt-gospels", category: "apostle", testament: "NT",
+    book: "Matthew", references: ["Matthew 10:4", "Mark 3:18", "Luke 6:15", "Acts 1:13"],
+    description: "One of the Twelve apostles. Called 'the Zealot' (or 'the Canaanite'). Little is known of his ministry; tradition places him in various regions.",
+    tags: ["apostle", "twelve"]
+  },
+  {
+    id: "james-alphaeus", name: "James (son of Alphaeus)",
+    birthYear: 0, deathYear: 62, textualAge: null,
+    dateCertainty: "approximate", era: "nt-gospels", category: "apostle", testament: "NT",
+    book: "Matthew", references: ["Matthew 10:3", "Mark 3:18", "Luke 6:15"],
+    description: "One of the Twelve apostles. Also called James the Less (to distinguish him from James son of Zebedee). Little biographical detail is recorded.",
+    tags: ["apostle", "twelve"]
+  },
+  {
+    id: "jude-thaddaeus", name: "Judas (Thaddaeus, son of James)",
+    birthYear: 0, deathYear: 65, textualAge: null,
+    dateCertainty: "approximate", era: "nt-gospels", category: "apostle", testament: "NT",
+    book: "John", references: ["Matthew 10:3", "John 14:22", "Acts 1:13"],
+    description: "One of the Twelve apostles, also called Thaddaeus or Lebbaeus. Son of James, distinct from Judas Iscariot.",
+    tags: ["apostle", "twelve"]
+  },
+  {
+    id: "martha", name: "Martha",
+    birthYear: -20, deathYear: 50, textualAge: null,
+    dateCertainty: "approximate", era: "nt-gospels", category: "other", testament: "NT",
+    book: "Luke", references: ["Luke 10:38-42", "John 11", "John 12:2"],
+    parents: null, spouses: null, children: null,
+    description: "Sister of Mary and Lazarus of Bethany. Known for her hospitality and practical concern; gently rebuked by Jesus for worrying.",
+    tags: []
+  },
+  {
+    id: "mary-bethany", name: "Mary (of Bethany)",
+    birthYear: -20, deathYear: 50, textualAge: null,
+    dateCertainty: "approximate", era: "nt-gospels", category: "other", testament: "NT",
+    book: "Luke", references: ["Luke 10:39", "John 11", "John 12:3"],
+    parents: null, spouses: null, children: null,
+    description: "Sister of Martha and Lazarus. Sat at Jesus' feet to hear his teaching. Anointed Jesus' feet with costly perfume before his crucifixion.",
+    tags: []
+  },
+  {
+    id: "lazarus", name: "Lazarus",
+    birthYear: -20, deathYear: 50, textualAge: null,
+    dateCertainty: "approximate", era: "nt-gospels", category: "other", testament: "NT",
+    book: "John", references: ["John 11", "John 12"],
+    parents: null, spouses: null, children: null,
+    description: "Brother of Martha and Mary of Bethany. Died and was raised by Jesus after four days in the tomb — a sign of his power over death.",
+    tags: ["resurrection", "beloved"]
+  },
+  {
+    id: "simeon-elder", name: "Simeon (elder)",
+    birthYear: -40, deathYear: 5, textualAge: null,
+    dateCertainty: "approximate", era: "nt-gospels", category: "other", testament: "NT",
+    book: "Luke", references: ["Luke 2:25-35"],
+    description: "Righteous and devout elder; led by the Holy Spirit to the Temple. Blessed Jesus and prophesied to Mary about the sword that would pierce her soul.",
+    tags: ["temple", "blessed"]
+  },
+  {
+    id: "anna", name: "Anna",
+    birthYear: -50, deathYear: 10, textualAge: null,
+    dateCertainty: "approximate", era: "nt-gospels", category: "other", testament: "NT",
+    book: "Luke", references: ["Luke 2:36-38"],
+    description: "Prophetess at the Temple in Jerusalem. Worshiped there with fastings and prayers; spoke about Jesus to all who looked for redemption.",
+    tags: ["prophet", "temple", "blessed"]
+  },
+  {
+    id: "zebedee", name: "Zebedee",
+    birthYear: -20, deathYear: 45, textualAge: null,
+    dateCertainty: "approximate", era: "nt-gospels", category: "other", testament: "NT",
+    book: "Matthew", references: ["Matthew 4:21", "Matthew 26:37"],
+    parents: null, spouses: ["salome"], children: ["james-zebedee", "john-apostle"],
+    description: "Father of the apostles James and John (the 'sons of Zebedee'). A fisherman; his wife Salome was a follower of Jesus.",
+    tags: []
+  },
+  {
+    id: "salome", name: "Salome",
+    birthYear: -15, deathYear: 50, textualAge: null,
+    dateCertainty: "approximate", era: "nt-gospels", category: "other", testament: "NT",
+    book: "Matthew", references: ["Matthew 27:55-56", "Mark 16:1"],
+    parents: null, spouses: ["zebedee"], children: ["james-zebedee", "john-apostle"],
+    description: "Wife of Zebedee; mother of apostles James and John. Asked Jesus that her sons sit at his right and left in the kingdom.",
+    tags: []
+  },
+  {
+    id: "herod-great", name: "Herod the Great",
+    birthYear: -73, deathYear: -4, textualAge: 69,
+    dateCertainty: "firm", era: "second-temple", category: "foreign-king", testament: "NT",
+    book: "Matthew", references: ["Matthew 2", "Luke 1:5"], reignStart: -37, reignEnd: -4,
+    description: "King of Judea under Rome. Built the Second Temple. Murdered his wife and sons. Attempted to kill the infant Jesus. Died in Jericho.",
+    tags: ["king", "judea", "temple", "cruel"]
+  },
+  {
+    id: "herod-antipas", name: "Herod Antipas",
+    birthYear: -20, deathYear: 39, textualAge: null,
+    dateCertainty: "firm", era: "nt-gospels", category: "foreign-king", testament: "NT",
+    book: "Matthew", references: ["Matthew 14", "Mark 6", "Luke 3:19-20"], reignStart: -4, reignEnd: 39,
+    parents: ["herod-great"], spouses: ["herodias"], children: null,
+    description: "Son of Herod the Great; tetrarch of Galilee. Married Herodias (his brother's wife). Imprisoned John the Baptist; ordered his beheading.",
+    tags: ["tetrarch", "galilee"]
+  },
+  {
+    id: "herodias", name: "Herodias",
+    birthYear: -5, deathYear: 39, textualAge: null,
+    dateCertainty: "approximate", era: "nt-gospels", category: "other", testament: "NT",
+    book: "Matthew", references: ["Matthew 14:3-12", "Mark 6:17-29"],
+    spouses: ["herod-antipas"], children: null,
+    description: "Wife of Herod Antipas (her uncle's son). Demanded the beheading of John the Baptist after her daughter danced before Herod.",
+    tags: []
+  },
+  {
+    id: "pontius-pilate", name: "Pontius Pilate",
+    birthYear: -25, deathYear: 36, textualAge: null,
+    dateCertainty: "firm", era: "nt-gospels", category: "foreign-king", testament: "NT",
+    book: "Matthew", references: ["Matthew 27", "Mark 15", "Luke 23", "John 18-19"],
+    description: "Roman prefect of Judea 26-36 AD. Presided over the trial of Jesus; reluctantly authorized the crucifixion.",
+    tags: ["prefect", "rome", "passion"]
+  },
+  {
+    id: "elkanah", name: "Elkanah",
+    birthYear: -1120, deathYear: null, textualAge: null,
+    dateCertainty: "approximate", era: "judges", category: "patriarch", testament: "OT",
+    book: "1 Samuel", references: ["1 Samuel 1"],
+    spouses: ["hannah"], children: ["samuel"],
+    description: "Father of the prophet Samuel. Worshiped at Shiloh; took his wives to the yearly festival.",
+    tags: []
   }
 );
 
